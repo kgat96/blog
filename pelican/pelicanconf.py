@@ -7,23 +7,30 @@ AUTHOR = u'Kage Shen'
 SITENAME = u'Kage\'s Blog'
 #SITEURL = '//' + getenv("SITEURL", default='localhost:8000')
 
+SITEURL = u'http://kgat96.github.io/'
+
 PATH = 'content'
 
 TIMEZONE = 'Asia/Hong_Kong'
 DEFAULT_LANG = 'zh'
 LOCALE = 'zh_HK.utf8'
 
+GOOGLE_ANALYTICS = u'UA-60962023-1'
 DISQUS_SITENAME = u"kgat96"
+RELATIVE_URLS = False
+
 #DATE_FORMATS = {
 #'zh': ((u'zh_HK', 'utf8'), u'%Y年%m月%d日(週%a)',),
 #'zhs': ((u'zh_CN', 'utf8'), u'%Y年%m月%d日(周%a)',),
 #}
 
 THEME = 'zurb-F5-basic'
-PLUGIN_PATH = u"pelican-plugins"
+
+PLUGIN_PATH = u"plugins"
 
 PLUGINS = ["i18n_subsites",
 "better_codeblock_line_numbering",
+#"disqus_static"
 #"plantuml",
 #"youku",
 #"youtube",
