@@ -5,7 +5,7 @@ from os import getenv
 
 AUTHOR = u'Kage Shen'
 SITENAME = u'Kage\'s Blog'
-SITEURL = '//' + getenv("SITEURL", default='localhost:8000')
+#SITEURL = '//' + getenv("SITEURL", default='localhost:8000')
 
 PATH = 'content'
 
@@ -19,8 +19,8 @@ DISQUS_SITENAME = u"kgat96"
 #'zhs': ((u'zh_CN', 'utf8'), u'%Y年%m月%d日(周%a)',),
 #}
 
-THEME = '../../pelican-themes/zurb-F5-basic'
-PLUGIN_PATH = u"../../pelican-plugins"
+THEME = 'zurb-F5-basic'
+PLUGIN_PATH = u"pelican-plugins"
 
 PLUGINS = ["i18n_subsites",
 "better_codeblock_line_numbering",
