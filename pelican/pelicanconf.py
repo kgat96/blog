@@ -5,9 +5,8 @@ from os import getenv
 
 AUTHOR = u'Kage Shen'
 SITENAME = u'Kage\'s Blog'
-#SITEURL = '//' + getenv("SITEURL", default='localhost:8000')
-
 SITEURL = u'http://kgat96.github.io/'
+#SITEURL = '//' + getenv("SITEURL", default='localhost:8000')
 
 PATH = 'content'
 
