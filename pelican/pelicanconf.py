@@ -18,30 +18,20 @@ GOOGLE_ANALYTICS = u'UA-60962023-1'
 DISQUS_SITENAME = u"kgat96"
 RELATIVE_URLS = False
 
-#DATE_FORMATS = {
-#'zh': ((u'zh_HK', 'utf8'), u'%Y年%m月%d日(週%a)',),
-#'zhs': ((u'zh_CN', 'utf8'), u'%Y年%m月%d日(周%a)',),
-#}
-
-THEME = 'zurb-F5-basic'
+#THEME = 'zurb-F5-basic'
+THEME = 'blue-penguin'
 
 PLUGIN_PATH = u"plugins"
 
-PLUGINS = ["i18n_subsites",
+PLUGINS = [
+# "i18n_subsites",
 "better_codeblock_line_numbering",
-#"disqus_static"
-#"plantuml",
-#"youku",
-#"youtube",
-#'tipue_search',
-'neighbors',
-'series',
-#'bootstrapify',
-#'twitter_bootstrap_rst_directives',
+# 'neighbors',
+# 'series',
 "render_math",
-#'extract_toc',
 'sitemap',
-'summary']
+# 'summary'
+]
 
 SITEMAP = {
 'format': 'xml',
@@ -62,7 +52,11 @@ LINKS = (('Pelican', 'http://getpelican.com/'),
 # Social widget
 SOCIAL = (('Github', '#'),)
 
+PAGINATION_PATTERN = True
 DEFAULT_PAGINATION = 10
 
 # Uncomment following line if you want document-relative URLs when developing
 #RELATIVE_URLS = True
+
+
+
