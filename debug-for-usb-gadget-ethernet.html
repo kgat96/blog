@@ -1,19 +1,23 @@
 <!DOCTYPE html>
 <html lang="zh">
 <head>
-    <meta charset="utf-8" />
-    <title>Kage's Blog</title>
+      <meta charset="utf-8" />
+    <title>Kage's Blog &middot; PandaBoard ES USB Gadget Ethernet</title>
     <link rel="shortcut icon" type="image/png" href="http://kgat96.github.io/favicon.png">
     <link rel="shortcut icon" type="image/x-icon" href="http://kgat96.github.io/favicon.ico">
     <link rel="stylesheet" href="http://kgat96.github.io/theme/css/screen.css" type="text/css" />
     <link rel="stylesheet" href="http://kgat96.github.io/theme/css/pygments.css" type="text/css" />
     <link rel="stylesheet" href="http://kgat96.github.io/theme/css/print.css" type="text/css" media="print" />
     <meta name="generator" content="Pelican" />
+
+
+
+    <meta name="tags" contents="Pandaboard" />
 </head>
 <body>
     <header>
         <nav>
-                <li class="selected"><a href="http://kgat96.github.io">Home</a></li>
+                <li><a href="http://kgat96.github.io">Home</a></li>
                 <li><a href="http://kgat96.github.io/archives.html">Archives</a></li>
         </nav>
         <div class="header_box">
@@ -104,147 +108,22 @@
 
             </article>
             <div class="clear"></div>
-            <h4 class="date">May 01, 2015</h4>
-            <article class="post">
-<h2 class="title">
-                    <a href="http://kgat96.github.io/build-new-kernel-on-pandaboard.html" rel="bookmark" title="Permanent Link to &quot;PandaBoard ES 下 Kernel 4.0.0 的移植&quot;">PandaBoard ES 下 Kernel 4.0.0 的移植</a>
-                </h2>
+<h4>Comments</h4>
+    <div id="disqus_thread"></div>
+    <script type="text/javascript">
+        var disqus_shortname = 'kgat96'
+        var disqus_identifier = "debug-for-usb-gadget-ethernet.html";
+        var disqus_url = "http://kgat96.github.io/debug-for-usb-gadget-ethernet.html";
 
-                <blockquote>
-<p><strong>主要内容:</strong>
-实际上 <strong>Kernel 4.0.0</strong> 已经支持 <a href="http://pandaboard.org">PandaBoard</a> 的，应该是 <strong>Kernel</strong> 主分支都是支持这块板子的，只是在实际让最新 Kernel 跑起来的过程中还是有一些问题的，所以本文就是告诉你一步步让它跑起来的。</p>
-</blockquote>
-<h1>准备工作</h1>
-<p>1，可以正常使用的开发板一个</p>
-<p>2，Linux系统电脑一台</p>
-<p>3，&gt; 2G SD卡一张</p>
-<p>4，搭建编译环境</p>
-<ul>
-<li><strong>下载 arm-gcc 编译器</strong></li>
-</ul>
-<div class="highlight"><pre><span class="code-line">arm-2014.05-29-arm-none-linux-gnueabi-i686-pc-linux-gnu.tar.bz2</span>
-<span class="code-line">#arm-none-linux-gnueabi-gcc -v</span>
-<span class="code-line">gcc version 4.8.3 20140320 (prerelease) (Sourcery CodeBench Lite 2014.05-29)</span>
-</pre></div>
+        (function() {
+            var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+            dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        })();
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
 
 
-<ul>
-<li><strong>同步库 linux-omap (Kernel)</strong></li>
-</ul>
-<div class="highlight"><pre><span class="code-line">#git clone git://git.kernel.org/pub/scm/linux/kernel/git/tmlind/linux-omap.git</span>
-</pre></div>
-
-
-<ul>
-<li><strong>同步库 uboot (bootloader)</strong> </li>
-</ul>
-<blockquote>
-<p>原生库在  <a href="http://www.denx.de">www.denx.de</a> 非常慢</p>
-</blockquote>
-<div class="highlight"><pre><span class="code-line">#git clone https://github.com/RobertCNelson/u-boot.git</span>
-</pre></div>
-
-
-<ul>
-<li><strong>下载根文件系统 (ubuntu-14.04.2)</strong></li>
-</ul>
-<div class="highlight"><pre><span class="code-line">wget -c https://rcn-ee.com/rootfs/eewiki/minfs/ubuntu-14.04.2-minimal-armhf-2015-04-27.tar.xz</span>
-</pre></div>
-
-
-<h1>让它板子飞起来</h1>
-<p><strong>1，格式化&amp;制作启动分区</strong></p>
-<div class="highlight"><pre><span class="code-line">#fdisk -l</span>
-<span class="code-line">Disk /dev/sdc: 1.9 GiB, 2014838784 bytes, 3935232 sectors</span>
-<span class="code-line">Units: sectors of 1 * 512 = 512 bytes</span>
-<span class="code-line">Sector size (logical/physical): 512 bytes / 512 bytes</span>
-<span class="code-line">I/O size (minimum/optimal): 512 bytes / 512 bytes</span>
-<span class="code-line">Disklabel type: dos</span>
-<span class="code-line">Disk identifier: 0xfb04e098</span>
-<span class="code-line"></span>
-<span class="code-line">Device     Boot  Start     End Sectors  Size Id Type</span>
-<span class="code-line">/dev/sdc1  *      2048  264191  262144  128M  c W95 FAT32 (LBA)</span>
-<span class="code-line">/dev/sdc2       264192 3935231 3671040  1.8G 83 Linux</span>
-</pre></div>
-
-
-<p><strong><em>这里有两点要注意：</em></strong></p>
-<ul>
-<li>第一个分区一定是 W95 FAT32 (LBA) 格式</li>
-<li>第一个分区一定是可以引导的，既有 Boot *</li>
-</ul>
-<p><strong>2，编译 Uboot</strong></p>
-<p>最新的Uboot整的和Kernel的一样的图形化的配置界面了，略屌.</p>
-<p><img alt="uboot menuconfig" src="http://7xigc2.com1.z0.glb.clouddn.com/build-new-kernel-on-pandaboard-p1.png" /></p>
-<p>那么编译自然也和Kernel一样啦，这里先不对Uboot做修改，免得大家看不懂哈</p>
-<div class="highlight"><pre><span class="code-line">#export ARCH=arm</span>
-<span class="code-line">#export CROSS_COMPILE=arm-none-linux-gnueabi-</span>
-<span class="code-line">#make omap4_panda_defconfig</span>
-<span class="code-line">#make -j8</span>
-<span class="code-line">  ...</span>
-<span class="code-line">  OBJCOPY u-boot.bin</span>
-<span class="code-line">  MKIMAGE u-boot.img</span>
-<span class="code-line">  OBJCOPY u-boot.srec</span>
-<span class="code-line">  CC      spl/common/spl/spl.o</span>
-<span class="code-line">  LD      spl/common/spl/built-in.o</span>
-<span class="code-line">  CC      spl/lib/display_options.o</span>
-<span class="code-line">  LD      spl/lib/built-in.o</span>
-<span class="code-line">  LD      spl/u-boot-spl</span>
-<span class="code-line">  OBJCOPY spl/u-boot-spl.bin</span>
-<span class="code-line">  MKIMAGE MLO</span>
-</pre></div>
-
-
-<p>这里生成了几个比较重要的文件  <strong>MLO、u-boot.img</strong></p>
-<ul>
-<li><strong>MLO：</strong> TI x-loader 第二引导阶段的执行文件，omap启动的时候会读取这个文件，并load进内存 </li>
-<li><strong>u-boot.img：</strong> 这个不解释了 </li>
-</ul>
-<p><strong>2，编译 Kernel</strong></p>
-<p>编译之前我们需要做件事情，开启启动时候的打印 (<strong>EARLY_PRINTK</strong>) </p>
-<div class="highlight"><pre><span class="code-line">patch to omap2plus_defconfig:</span>
-<span class="code-line">+CONFIG_DEBUG_LL=y</span>
-<span class="code-line">+CONFIG_DEBUG_OMAP4UART3=y</span>
-<span class="code-line">+CONFIG_DEBUG_OMAP2PLUS_UART=y</span>
-<span class="code-line">+CONFIG_DEBUG_LL_INCLUDE=&quot;debug/omap2plus.S&quot;</span>
-<span class="code-line">+CONFIG_EARLY_PRINTK=y</span>
-</pre></div>
-
-
-<div class="highlight"><pre><span class="code-line">export ARCH=arm</span>
-<span class="code-line">export CROSS_COMPILE=arm-none-linux-gnueabi-</span>
-<span class="code-line">make omap2plus_defconfig</span>
-<span class="code-line">make zImage -j8  // 这里就使用zImage就可以了</span>
-<span class="code-line">make dtbs</span>
-<span class="code-line">cat arch/arm/boot/zImage arch/arm/boot/dts/omap4-panda-es.dtb &gt; /tmp/appended</span>
-<span class="code-line">mkimage -A arm -O linux -T kernel -C none -a 0x80008000 -e 0x80008000 \</span>
-<span class="code-line">         -n &quot;Linux&quot; -d /tmp/appended /tmp/uImage</span>
-</pre></div>
-
-
-<p>这里最后生成了uImage，那为什么不用 <strong>make uImage</strong> 来一步生成呢，当然你可以先测试一下看看。
-实际上从 linux 3.10 后，代码库就开始使用 dtbs 文件来描述板机配置，问什么，大家自己了解吧。</p>
-<p><strong>3，制作启动SD卡</strong></p>
-<p>拷贝刚才生成的 <strong>uImage MLO u-boot.img</strong> 到第一个分区，将下载的 <strong>ubuntu-14.04.2-minimal-armhf-2015-04-27.tar.xz</strong> 解压到第二个分区。</p>
-<p>好了终于可以看到他启动了 : ) </p>
-<p><img alt="boot log" src="http://7xigc2.com1.z0.glb.clouddn.com/build-new-kernel-on-pandaboard-p2.png" /></p>
-<blockquote>
-<p><strong>Note:</strong>
-这里 omap4-panda-es.dtb 就是板级配置文件了，上面是将他和 zImage 和到了一起，实际上还有一种
-更加灵活的方法，就是动态加载 dtb 文件，并加载相同的 zImage，下面提供 Uboot 动态加载命令：</p>
-</blockquote>
-<div class="highlight"><pre><span class="code-line">&gt; Panda # load mmc 0 zImage 0x81000000</span>
-<span class="code-line">&gt; Panda # load mmc 0 omap4-panda-es.dtb x81f00000</span>
-<span class="code-line">&gt; Panda # bootz 0x81000000 - 0x81f00000</span>
-</pre></div>
-
-                <div class="clear"></div>
-                <div class="info">
-                    <a href="http://kgat96.github.io/build-new-kernel-on-pandaboard.html">posted at 10:00</a>&nbsp;&middot;&nbsp;<a href="http://kgat96.github.io/category/.html" rel="tag"></a>&nbsp;&middot;&nbsp;<a href="http://kgat96.github.io/tag/pandaboard.html" class="tags">Pandaboard</a>
-                </div>
-
-            </article>
-            <div class="clear"></div>
             <div class="clear"></div>
             <footer>
                 <p>

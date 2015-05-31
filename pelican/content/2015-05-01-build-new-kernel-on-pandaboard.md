@@ -14,44 +14,48 @@ Summary:
 =======
 
 1，可以正常使用的开发板一个
+
 2，Linux系统电脑一台
+
 3，> 2G SD卡一张
+
 4，搭建编译环境
 
  - **下载 arm-gcc 编译器**
 
-<pre><code class="cpp">
+
+```
 arm-2014.05-29-arm-none-linux-gnueabi-i686-pc-linux-gnu.tar.bz2
 #arm-none-linux-gnueabi-gcc -v
 gcc version 4.8.3 20140320 (prerelease) (Sourcery CodeBench Lite 2014.05-29)
-</code></pre>
+```
 
  - **同步库 linux-omap (Kernel)**
 
-<pre><code class="bash">
+```
 #git clone git://git.kernel.org/pub/scm/linux/kernel/git/tmlind/linux-omap.git
-</code></pre>
+```
 
  - **同步库 uboot (bootloader)** 
 
  > 原生库在  [www.denx.de](http://www.denx.de) 非常慢
 
-<pre><code class="bash">
+```
 #git clone https://github.com/RobertCNelson/u-boot.git
-</code></pre>
+```
 
  - **下载根文件系统 (ubuntu-14.04.2)**
 
-<pre><code class="bash">
+```
 wget -c https://rcn-ee.com/rootfs/eewiki/minfs/ubuntu-14.04.2-minimal-armhf-2015-04-27.tar.xz
-</code></pre>
+```
 
 让它板子飞起来
 ====
 
  **1，格式化&制作启动分区**
 
-<pre><code class="bash">
+```
 #fdisk -l
 Disk /dev/sdc: 1.9 GiB, 2014838784 bytes, 3935232 sectors
 Units: sectors of 1 * 512 = 512 bytes
@@ -63,7 +67,7 @@ Disk identifier: 0xfb04e098
 Device     Boot  Start     End Sectors  Size Id Type
 /dev/sdc1  *      2048  264191  262144  128M  c W95 FAT32 (LBA)
 /dev/sdc2       264192 3935231 3671040  1.8G 83 Linux
-</code></pre>
+```
 
 ***这里有两点要注意：***
 
@@ -78,7 +82,7 @@ Device     Boot  Start     End Sectors  Size Id Type
 
 那么编译自然也和Kernel一样啦，这里先不对Uboot做修改，免得大家看不懂哈
 
-<pre><code class="bash">
+```
 #export ARCH=arm
 #export CROSS_COMPILE=arm-none-linux-gnueabi-
 #make omap4_panda_defconfig
@@ -94,7 +98,7 @@ Device     Boot  Start     End Sectors  Size Id Type
   LD      spl/u-boot-spl
   OBJCOPY spl/u-boot-spl.bin
   MKIMAGE MLO
-</code></pre>
+```
 
 这里生成了几个比较重要的文件  **MLO、u-boot.img**
 
@@ -105,16 +109,16 @@ Device     Boot  Start     End Sectors  Size Id Type
 
 编译之前我们需要做件事情，开启启动时候的打印 (**EARLY_PRINTK**) 
 
-<pre><code class="patch">
+```
 patch to omap2plus_defconfig:
 +CONFIG_DEBUG_LL=y
 +CONFIG_DEBUG_OMAP4UART3=y
 +CONFIG_DEBUG_OMAP2PLUS_UART=y
 +CONFIG_DEBUG_LL_INCLUDE="debug/omap2plus.S"
 +CONFIG_EARLY_PRINTK=y
-</code></pre>
+```
 
-<pre><code class="cpp">
+```
 export ARCH=arm
 export CROSS_COMPILE=arm-none-linux-gnueabi-
 make omap2plus_defconfig
@@ -123,7 +127,7 @@ make dtbs
 cat arch/arm/boot/zImage arch/arm/boot/dts/omap4-panda-es.dtb > /tmp/appended
 mkimage -A arm -O linux -T kernel -C none -a 0x80008000 -e 0x80008000 \
          -n "Linux" -d /tmp/appended /tmp/uImage
-</code></pre>
+```
 
 这里最后生成了uImage，那为什么不用 **make uImage** 来一步生成呢，当然你可以先测试一下看看。
 实际上从 linux 3.10 后，代码库就开始使用 dtbs 文件来描述板机配置，问什么，大家自己了解吧。
@@ -140,10 +144,10 @@ mkimage -A arm -O linux -T kernel -C none -a 0x80008000 -e 0x80008000 \
 > 这里 omap4-panda-es.dtb 就是板级配置文件了，上面是将他和 zImage 和到了一起，实际上还有一种
 > 更加灵活的方法，就是动态加载 dtb 文件，并加载相同的 zImage，下面提供 Uboot 动态加载命令：
 
-<pre><code class="bash">
+```
 > Panda # load mmc 0 zImage 0x81000000
 > Panda # load mmc 0 omap4-panda-es.dtb x81f00000
 > Panda # bootz 0x81000000 - 0x81f00000
-</code></pre>
+```
 
 
