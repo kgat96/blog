@@ -1,6 +1,6 @@
 Title: PandaBoard ES 下 Kernel 4.0.0 的移植
 Date: 2015-05-01 10:00
-Category: 
+Category:
 Tags: Pandaboard
 Slug: build-new-kernel-on-pandaboard
 Author: Kage Shen
@@ -8,7 +8,7 @@ Summary:
 
 > **主要内容:**
 > 实际上 **Kernel 4.0.0** 已经支持 [PandaBoard](http://pandaboard.org) 的，应该是 **Kernel** 主分支都是支持这块板子的，只是在实际让最新 Kernel 跑起来的过程中还是有一些问题的，所以本文就是告诉你一步步让它跑起来的。
-> 
+>
 
 准备工作
 =======
@@ -36,7 +36,7 @@ gcc version 4.8.3 20140320 (prerelease) (Sourcery CodeBench Lite 2014.05-29)
 #git clone git://git.kernel.org/pub/scm/linux/kernel/git/tmlind/linux-omap.git
 ```
 
- - **同步库 uboot (bootloader)** 
+ - **同步库 uboot (bootloader)**
 
  > 原生库在  [www.denx.de](http://www.denx.de) 非常慢
 
@@ -73,7 +73,7 @@ Device     Boot  Start     End Sectors  Size Id Type
 
  - 第一个分区一定是 W95 FAT32 (LBA) 格式
  - 第一个分区一定是可以引导的，既有 Boot *
- 
+
 **2，编译 Uboot**
 
 最新的Uboot整的和Kernel的一样的图形化的配置界面了，略屌.
@@ -102,12 +102,12 @@ Device     Boot  Start     End Sectors  Size Id Type
 
 这里生成了几个比较重要的文件  **MLO、u-boot.img**
 
- - **MLO：** TI x-loader 第二引导阶段的执行文件，omap启动的时候会读取这个文件，并load进内存 
- - **u-boot.img：** 这个不解释了 
+ - **MLO：** TI x-loader 第二引导阶段的执行文件，omap启动的时候会读取这个文件，并load进内存
+ - **u-boot.img：** 这个不解释了
 
 **2，编译 Kernel**
 
-编译之前我们需要做件事情，开启启动时候的打印 (**EARLY_PRINTK**) 
+编译之前我们需要做件事情，开启启动时候的打印 (**EARLY_PRINTK**)
 
 ```
 patch to omap2plus_defconfig:
@@ -136,7 +136,7 @@ mkimage -A arm -O linux -T kernel -C none -a 0x80008000 -e 0x80008000 \
 
 拷贝刚才生成的 **uImage MLO u-boot.img** 到第一个分区，将下载的 **ubuntu-14.04.2-minimal-armhf-2015-04-27.tar.xz** 解压到第二个分区。
 
-好了终于可以看到他启动了 : ) 
+好了终于可以看到他启动了 : )
 
 ![boot log](http://7xigc2.com1.z0.glb.clouddn.com/build-new-kernel-on-pandaboard-p2.png)
 
@@ -149,5 +149,4 @@ mkimage -A arm -O linux -T kernel -C none -a 0x80008000 -e 0x80008000 \
 > Panda # load mmc 0 omap4-panda-es.dtb x81f00000
 > Panda # bootz 0x81000000 - 0x81f00000
 ```
-
 
