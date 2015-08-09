@@ -5,29 +5,36 @@ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
 <url>
 <loc>http://kgat96.github.io/</loc>
-<lastmod>2015-05-31T19:57:27-00:00</lastmod>
+<lastmod>2015-08-09T17:14:54-00:00</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
 
 <url>
 <loc>http://kgat96.github.io/archives.html</loc>
-<lastmod>2015-05-31T19:57:27-00:00</lastmod>
+<lastmod>2015-08-09T17:14:54-00:00</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
 
 <url>
 <loc>http://kgat96.github.io/tags.html</loc>
-<lastmod>2015-05-31T19:57:27-00:00</lastmod>
+<lastmod>2015-08-09T17:14:54-00:00</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
 
 <url>
 <loc>http://kgat96.github.io/categories.html</loc>
-<lastmod>2015-05-31T19:57:27-00:00</lastmod>
+<lastmod>2015-08-09T17:14:54-00:00</lastmod>
 <changefreq>daily</changefreq>
+<priority>0.5</priority>
+</url>
+
+<url>
+<loc>http://kgat96.github.io/archlinux-setup-quartus-15.html</loc>
+<lastmod>2015-08-08T10:00:00+08:00</lastmod>
+<changefreq>monthly</changefreq>
 <priority>0.5</priority>
 </url>
 
@@ -47,7 +54,14 @@ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
 <url>
 <loc>http://kgat96.github.io/category/.html</loc>
-<lastmod>2015-05-31T10:00:00+07:37</lastmod>
+<lastmod>2015-08-08T10:00:00+07:37</lastmod>
+<changefreq>daily</changefreq>
+<priority>0.5</priority>
+</url>
+
+<url>
+<loc>http://kgat96.github.io/tag/linux.html</loc>
+<lastmod>2015-08-08T10:00:00+07:37</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
@@ -60,8 +74,22 @@ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 </url>
 
 <url>
+<loc>http://kgat96.github.io/tag/fpga.html</loc>
+<lastmod>2015-08-08T10:00:00+07:37</lastmod>
+<changefreq>daily</changefreq>
+<priority>0.5</priority>
+</url>
+
+<url>
+<loc>http://kgat96.github.io/tag/quartus.html</loc>
+<lastmod>2015-08-08T10:00:00+07:37</lastmod>
+<changefreq>daily</changefreq>
+<priority>0.5</priority>
+</url>
+
+<url>
 <loc>http://kgat96.github.io/author/kage-shen.html</loc>
-<lastmod>2015-05-31T10:00:00+07:37</lastmod>
+<lastmod>2015-08-08T10:00:00+07:37</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>

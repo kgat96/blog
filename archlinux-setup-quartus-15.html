@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+        <meta charset="utf-8" />
+    <title>Kage's Blog | Archlinux Setup Quartus II 15.0</title>
+    <link rel="shortcut icon" type="image/png" href="http://kgat96.github.io/favicon.png">
+    <link rel="shortcut icon" type="image/x-icon" href="http://kgat96.github.io/favicon.ico">
+    <link rel="stylesheet" href="http://kgat96.github.io/theme/css/screen.css" type="text/css" />
+    <link rel="stylesheet" href="http://kgat96.github.io/theme/css/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="http://kgat96.github.io/theme/css/print.css" type="text/css" media="print" />
+    <meta name="generator" content="Pelican" />
+
+    <meta name="keywords" content="fpga,linux,quartus" />
+</head>
+<body>
+    <header>
+        <nav>
+            <ul>
+                <li><a href="http://kgat96.github.io">Home</a></li>
+                <li><a href="http://kgat96.github.io/archives">Archives</a></li>
+            </ul>
+        </nav>
+        <div class="header_box">
+            <h1><a href="http://kgat96.github.io">Kage's Blog</a></h1>
+        </div>
+    </header>
+    <div id="wrapper">
+        <div id="content">            <h4 class="date">Aug 08, 2015</h4>
+
+            <article class="post">
+                <h2 class="title">
+                    <a href="http://kgat96.github.io/archlinux-setup-quartus-15.html" rel="bookmark" title="Permanent Link to &quot;Archlinux Setup Quartus II 15.0&quot;">Archlinux Setup Quartus II 15.0</a>
+                </h2>
+
+                <blockquote>
+<p><strong>主要内容:</strong><br />
+因为工作需要使用到 Quartus II, 于是乎就整了个XP电脑, 装了软件, 只是用习惯了Linux<br />
+突然又要我用XP, 只能是让我无力吐槽啊, 发现Quartus有linux版本的, 果断安装之, 装完<br />
+后面x解的事情就交给你们自己了, 我就不说了 ...  </p>
+</blockquote>
+<h1>准备工作</h1>
+<p>1, Linux 64bit 系统电脑一台</p>
+<h1>下载 Quartus II 15.0 软件</h1>
+<p>送上<a href="http://download.altera.com/akdlm/software/acdsinst/15.0/145/ib_installers/QuartusSetup-15.0.0.145-linux.run">下载地址</a>, 请叫我雷锋!<br />
+这个版本是自带 Cyclone IV 库的 (安装的时候可以选择安装)</p>
+<h1>安装配置</h1>
+<p>1, 加上执行权限把</p>
+<div class="highlight"><pre><span class="code-line">chmod +x QuartusSetup-15.0.0.145-linux.run</span>
+</pre></div>
+
+
+<p>2, 安装</p>
+<p>这里你就直接运行它就可以了, 中间需要你选择安装路径什么的, 相信你都会把 :)</p>
+<p>安装好后 就可以直接运行了:</p>
+<div class="highlight"><pre><span class="code-line">./altera/15.0/quartus/bin/quartus --64bit</span>
+</pre></div>
+
+
+<p>不过你会发现它启动不了, 好吧, 再终端命令行里执行一下, 发现如下错误:</p>
+<div class="highlight"><pre><span class="code-line">libpng12.so.0: cannot open shared object file</span>
+</pre></div>
+
+
+<p>一番谷歌后了解到, 这个库现在已经不用了, 所以很多机器没用这个库了,
+那么就需要我们自己安装一个这样的库咯, 我用的是 archlinux, 其它的发行版应该类似.</p>
+<div class="highlight"><pre><span class="code-line">wget https://aur.archlinux.org/packages/li/libpng12/PKGBUILD</span>
+<span class="code-line">makepkg ./PKGBUILD</span>
+<span class="code-line">makepkg -i ./PKGBUILD</span>
+</pre></div>
+
+
+<p>实际上它就是下载了一个libpng, 编译安装的, 所以这个方法也可以试试.<br />
+http://sourceforge.net/projects/libpng/files/libpng-12.tar.xz</p>
+<p>到了这个, 这个软件基本就能用了, 那么我可以还需要使用到 USB Blaster, 需要配置一下
+USB设备的权限, 如下:</p>
+<div class="highlight"><pre><span class="code-line">touch /etc/udev/rules.d/51-altera-usb-blaster.rules</span>
+</pre></div>
+
+
+<p>加入一下内容:</p>
+<div class="highlight"><pre><span class="code-line">SUBSYSTEM==&quot;usb&quot;, ATTR{idVendor}==&quot;09fb&quot;, ATTR{idProduct}==&quot;6001&quot;, MODE=&quot;0666&quot;</span>
+<span class="code-line">SUBSYSTEM==&quot;usb&quot;, ATTR{idVendor}==&quot;09fb&quot;, ATTR{idProduct}==&quot;6002&quot;, MODE=&quot;0666&quot;</span>
+<span class="code-line">SUBSYSTEM==&quot;usb&quot;, ATTR{idVendor}==&quot;09fb&quot;, ATTR{idProduct}==&quot;6003&quot;, MODE=&quot;0666&quot;</span>
+<span class="code-line">SUBSYSTEM==&quot;usb&quot;, ATTR{idVendor}==&quot;09fb&quot;, ATTR{idProduct}==&quot;6010&quot;, MODE=&quot;0666&quot;</span>
+<span class="code-line">SUBSYSTEM==&quot;usb&quot;, ATTR{idVendor}==&quot;09fb&quot;, ATTR{idProduct}==&quot;6810&quot;, MODE=&quot;0666&quot;</span>
+</pre></div>
+
+
+<p>重启一下电脑, 打开软件, 就能识别你的usb硬件了.</p>
+<p>最后, 有图有真相嘛:  </p>
+<p><img alt="picture" src="http://7xigc2.com1.z0.glb.clouddn.com/archlinux-setup-quartus-15-p1.png" /></p>
+<blockquote>
+<p>参考资料:<br />
+[1]: <a href="https://wiki.archlinux.org/index.php/Altera_Design_Software">Altera Design Software</a><br />
+[2]: <a href="http://bbs.eetop.cn/viewthread.php?tid=485257">注(po)册(jie)</a>  </p>
+</blockquote>
+                <div class="clear"></div>
+
+                <div class="info">
+                    <a href="http://kgat96.github.io/archlinux-setup-quartus-15.html">posted at 10:00</a>
+                    &nbsp;&middot;&nbsp;<a href="http://kgat96.github.io/category/.html" rel="tag"></a>
+                    &nbsp;&middot;
+                    &nbsp;<a href="http://kgat96.github.io/tag/fpga.html" class="tags">fpga</a>
+                    &nbsp;<a href="http://kgat96.github.io/tag/linux.html" class="tags">linux</a>
+                    &nbsp;<a href="http://kgat96.github.io/tag/quartus.html" class="tags">quartus</a>
+                </div>
+            </article>
+<h4>Comments</h4>
+    <div id="disqus_thread"></div>
+    <script type="text/javascript">
+        var disqus_shortname = 'kgat96'
+        var disqus_identifier = "archlinux-setup-quartus-15.html";
+        var disqus_url = "http://kgat96.github.io/archlinux-setup-quartus-15.html";
+
+        (function() {
+            var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+            dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        })();
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+
+            <div class="clear"></div>
+            <footer>
+                <p>
+                <a href="https://github.com/jody-frankowski/blue-penguin">Blue Penguin</a> Theme
+                &middot;
+                Powered by <a href="http://getpelican.com">Pelican</a>
+            </footer>
+        </div>
+        <div class="clear"></div>
+    </div>
+    <script type="text/javascript">
+    var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+    document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+    </script>
+    <script type="text/javascript">
+    try {
+        var pageTracker = _gat._getTracker("UA-60962023-1");
+    pageTracker._trackPageview();
+    } catch(err) {}</script>
+</body>
+</html>

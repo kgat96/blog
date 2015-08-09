@@ -1,16 +1,15 @@
-Title: archlinux setup Quartus II 15.0
-Date: 2015-05-31 10:00
+Title: Archlinux Setup Quartus II 15.0
+Date: 2015-08-08 10:00
 Category:
-Tags: fpga linux
+Tags: fpga, linux, quartus
 Slug: archlinux-setup-quartus-15
 Author: Kage Shen
 Summary:
 
-> **主要内容:**
-> 因为工作需要使用到 Quartus II, 于是乎就整了个XP电脑, 装了软件, 只是用习惯了Linux
-> 突然又要我用XP, 只能是让我无力吐槽啊, 发现Quartus有linux版本的, 果断安装之, 装完
-> 后面X解的事情就交给你们自己了, 我就不说了 ...
->
+> **主要内容:**  
+> 因为工作需要使用到 Quartus II, 于是乎就整了个XP电脑, 装了软件, 只是用习惯了Linux  
+> 突然又要我用XP, 只能是让我无力吐槽啊, 发现Quartus有linux版本的, 果断安装之, 装完  
+> 后面x解的事情就交给你们自己了, 我就不说了 ...  
 
 准备工作
 =======
@@ -20,8 +19,7 @@ Summary:
 下载 Quartus II 15.0 软件
 ====
 
-送上下载地址, 请叫我雷锋!
-http://download.altera.com/akdlm/software/acdsinst/15.0/145/ib_installers/QuartusSetup-15.0.0.145-linux.run
+送上[下载地址](http://download.altera.com/akdlm/software/acdsinst/15.0/145/ib_installers/QuartusSetup-15.0.0.145-linux.run), 请叫我雷锋!  
 这个版本是自带 Cyclone IV 库的 (安装的时候可以选择安装)
 
 安装配置
@@ -55,10 +53,10 @@ libpng12.so.0: cannot open shared object file
 ```
 wget https://aur.archlinux.org/packages/li/libpng12/PKGBUILD
 makepkg ./PKGBUILD
-makepkg -i./PKGBUILD
+makepkg -i ./PKGBUILD
 ```
 
-实际上它就是下载了一个libpng, 编译安装的, 所以这个方法也可以试试.
+实际上它就是下载了一个libpng, 编译安装的, 所以这个方法也可以试试.  
 http://sourceforge.net/projects/libpng/files/libpng-12.tar.xz
 
 到了这个, 这个软件基本就能用了, 那么我可以还需要使用到 USB Blaster, 需要配置一下
@@ -80,11 +78,10 @@ SUBSYSTEM=="usb", ATTR{idVendor}=="09fb", ATTR{idProduct}=="6810", MODE="0666"
 
 重启一下电脑, 打开软件, 就能识别你的usb硬件了.
 
-最后, 有图有真相嘛:
+最后, 有图有真相嘛:  
 
 ![picture](http://7xigc2.com1.z0.glb.clouddn.com/archlinux-setup-quartus-15-p1.png)
 
-> 参考资料:
-> \[1]: [Altera Design Software](https://wiki.archlinux.org/index.php/Altera_Design_Software)
-> \[2]: [X解](http://bbs.eetop.cn/viewthread.php?tid=485257)
-
+> 参考资料:  
+> [1]: [Altera Design Software](https://wiki.archlinux.org/index.php/Altera_Design_Software)  
+> [2]: [注(po)册(jie)](http://bbs.eetop.cn/viewthread.php?tid=485257)  

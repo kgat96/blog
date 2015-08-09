@@ -2,7 +2,7 @@
 <html lang="zh">
 <head>
     <meta charset="utf-8" />
-    <title>Kage's Blog &middot; articles tagged "Pandaboard"</title>
+    <title>Kage's Blog | articles tagged "Pandaboard"</title>
     <link rel="shortcut icon" type="image/png" href="http://kgat96.github.io/favicon.png">
     <link rel="shortcut icon" type="image/x-icon" href="http://kgat96.github.io/favicon.ico">
     <link rel="stylesheet" href="http://kgat96.github.io/theme/css/screen.css" type="text/css" />
@@ -13,24 +13,32 @@
 <body>
     <header>
         <nav>
-                <li class="ephemeral selected"><a href="http://kgat96.github.io/tag/pandaboard.html">Pandaboard</a></li>                <li><a href="http://kgat96.github.io">Home</a></li>
-                <li><a href="http://kgat96.github.io/archives.html">Archives</a></li>
+            <ul>
+                <li class="ephemeral selected"><a href="http://kgat96.github.io/tag/pandaboard.html">Pandaboard</a></li>
+                <li><a href="http://kgat96.github.io">Home</a></li>
+                <li><a href="http://kgat96.github.io/archives">Archives</a></li>
+            </ul>
         </nav>
         <div class="header_box">
             <h1><a href="http://kgat96.github.io">Kage's Blog</a></h1>
         </div>
     </header>
     <div id="wrapper">
-        <div id="content">
-            <h4 class="date">May 31, 2015</h4>
+        <div id="content">            <h4 class="date">May 31, 2015</h4>
+
             <article class="post">
-<h2 class="title">
+                <h2 class="title">
                     <a href="http://kgat96.github.io/debug-for-usb-gadget-ethernet.html" rel="bookmark" title="Permanent Link to &quot;PandaBoard ES USB Gadget Ethernet&quot;">PandaBoard ES USB Gadget Ethernet</a>
                 </h2>
 
                 <blockquote>
 <p><strong>主要内容:</strong>
-当你调试的使用如果有网络，是不是很方便呢！但是你想搭建环境的时候却发现各种麻烦，例如需要专门的硬件（路由器），需要一根网线链接，没有路由的话可能要来回插拔网线，很是麻烦。大家电脑USB口都很多，那为什么不用USB来的调试板子呢？如果能像ADB一样，那多方便啊，但是人家是Android啊，我们在调基本的linux的时候没有ADB这样的服务啊，那能不能USB转网口来通信呢？网络一通什么nfs，ssh都能用了，其他的什么的都是浮云了，于是成文共享。</p>
+当你调试的使用如果有网络,是不是很方便呢!但是你想搭建环境的时候却发现各种麻
+烦,例如需要专门的硬件(路由器),需要一根网线链接，没有路由的话可能要来回插
+拔网线,很是麻烦.大家电脑USB口都很多,那为什么不用USB来的调试板子呢?如果能
+像ADB一样,那多方便啊,但是人家是Android啊,我们在调基本的linux的时候没有ADB
+这样的服务啊,那能不能USB转网口来通信呢?网络一通什么nfs,ssh都能用了, 其他的
+什么的都是浮云了，于是成文共享.</p>
 </blockquote>
 <h1>准备工作</h1>
 <p>1，可以正常使用的开发板一个</p>
@@ -94,19 +102,20 @@
 <p>现在你就可以在板子上访问外网了，好玩吧！</p>
 <blockquote>
 <p>参考资料:
-[1]: <a href="http://wiki.openmoko.org/wiki/USB_Networking">Openmoko Networking Setup USB Networking</a> </p>
+[1]: <a href="http://wiki.openmoko.org/wiki/USB_Networking">Openmoko Networking Setup USB Networking</a></p>
 </blockquote>
-
                 <div class="clear"></div>
-                <div class="info">
-                    <a href="http://kgat96.github.io/debug-for-usb-gadget-ethernet.html">posted at 10:00</a>&nbsp;&middot;&nbsp;<a href="http://kgat96.github.io/category/.html" rel="tag"></a>&nbsp;&middot;&nbsp;<a href="http://kgat96.github.io/tag/pandaboard.html" class="tags selected">Pandaboard</a>
-                </div>
 
-            </article>
-            <div class="clear"></div>
-            <h4 class="date">May 01, 2015</h4>
+                <div class="info">
+                    <a href="http://kgat96.github.io/debug-for-usb-gadget-ethernet.html">posted at 10:00</a>
+                    &nbsp;&middot;&nbsp;<a href="http://kgat96.github.io/category/.html" rel="tag"></a>
+                    &nbsp;&middot;
+                    &nbsp;<a href="http://kgat96.github.io/tag/pandaboard.html" class="tags selected">Pandaboard</a>
+                </div>
+            </article>            <h4 class="date">May 01, 2015</h4>
+
             <article class="post">
-<h2 class="title">
+                <h2 class="title">
                     <a href="http://kgat96.github.io/build-new-kernel-on-pandaboard.html" rel="bookmark" title="Permanent Link to &quot;PandaBoard ES 下 Kernel 4.0.0 的移植&quot;">PandaBoard ES 下 Kernel 4.0.0 的移植</a>
                 </h2>
 
@@ -136,7 +145,7 @@
 
 
 <ul>
-<li><strong>同步库 uboot (bootloader)</strong> </li>
+<li><strong>同步库 uboot (bootloader)</strong></li>
 </ul>
 <blockquote>
 <p>原生库在  <a href="http://www.denx.de">www.denx.de</a> 非常慢</p>
@@ -197,11 +206,11 @@
 
 <p>这里生成了几个比较重要的文件  <strong>MLO、u-boot.img</strong></p>
 <ul>
-<li><strong>MLO：</strong> TI x-loader 第二引导阶段的执行文件，omap启动的时候会读取这个文件，并load进内存 </li>
-<li><strong>u-boot.img：</strong> 这个不解释了 </li>
+<li><strong>MLO：</strong> TI x-loader 第二引导阶段的执行文件，omap启动的时候会读取这个文件，并load进内存</li>
+<li><strong>u-boot.img：</strong> 这个不解释了</li>
 </ul>
 <p><strong>2，编译 Kernel</strong></p>
-<p>编译之前我们需要做件事情，开启启动时候的打印 (<strong>EARLY_PRINTK</strong>) </p>
+<p>编译之前我们需要做件事情，开启启动时候的打印 (<strong>EARLY_PRINTK</strong>)</p>
 <div class="highlight"><pre><span class="code-line">patch to omap2plus_defconfig:</span>
 <span class="code-line">+CONFIG_DEBUG_LL=y</span>
 <span class="code-line">+CONFIG_DEBUG_OMAP4UART3=y</span>
@@ -226,7 +235,7 @@
 实际上从 linux 3.10 后，代码库就开始使用 dtbs 文件来描述板机配置，问什么，大家自己了解吧。</p>
 <p><strong>3，制作启动SD卡</strong></p>
 <p>拷贝刚才生成的 <strong>uImage MLO u-boot.img</strong> 到第一个分区，将下载的 <strong>ubuntu-14.04.2-minimal-armhf-2015-04-27.tar.xz</strong> 解压到第二个分区。</p>
-<p>好了终于可以看到他启动了 : ) </p>
+<p>好了终于可以看到他启动了 : )</p>
 <p><img alt="boot log" src="http://7xigc2.com1.z0.glb.clouddn.com/build-new-kernel-on-pandaboard-p2.png" /></p>
 <blockquote>
 <p><strong>Note:</strong>
@@ -237,14 +246,16 @@
 <span class="code-line">&gt; Panda # load mmc 0 omap4-panda-es.dtb x81f00000</span>
 <span class="code-line">&gt; Panda # bootz 0x81000000 - 0x81f00000</span>
 </pre></div>
-
                 <div class="clear"></div>
-                <div class="info">
-                    <a href="http://kgat96.github.io/build-new-kernel-on-pandaboard.html">posted at 10:00</a>&nbsp;&middot;&nbsp;<a href="http://kgat96.github.io/category/.html" rel="tag"></a>&nbsp;&middot;&nbsp;<a href="http://kgat96.github.io/tag/pandaboard.html" class="tags selected">Pandaboard</a>
-                </div>
 
+                <div class="info">
+                    <a href="http://kgat96.github.io/build-new-kernel-on-pandaboard.html">posted at 10:00</a>
+                    &nbsp;&middot;&nbsp;<a href="http://kgat96.github.io/category/.html" rel="tag"></a>
+                    &nbsp;&middot;
+                    &nbsp;<a href="http://kgat96.github.io/tag/pandaboard.html" class="tags selected">Pandaboard</a>
+                </div>
             </article>
-            <div class="clear"></div>
+
             <div class="clear"></div>
             <footer>
                 <p>
@@ -264,9 +275,5 @@
         var pageTracker = _gat._getTracker("UA-60962023-1");
     pageTracker._trackPageview();
     } catch(err) {}</script>
-
-    <link rel="stylesheet" href="/theme/css/styles/default.css">
-    <script src="/theme/js/highlight.pack.js"></script>
-    <script>hljs.initHighlightingOnLoad();</script>
 </body>
 </html>
