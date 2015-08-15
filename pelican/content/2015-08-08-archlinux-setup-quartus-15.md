@@ -33,7 +33,7 @@ chmod +x QuartusSetup-15.0.0.145-linux.run
 
 2, 安装
 
-这里你就直接运行它就可以了, 中间需要你选择安装路径什么的, 相信你都会把 :)
+这里你就直接运行它就可以了, 中间需要你选择安装路径什么的, 相信你都会吧 :)
 
 安装好后 就可以直接运行了:
 
@@ -85,3 +85,4 @@ SUBSYSTEM=="usb", ATTR{idVendor}=="09fb", ATTR{idProduct}=="6810", MODE="0666"
 > 参考资料:  
 > [1]: [Altera Design Software](https://wiki.archlinux.org/index.php/Altera_Design_Software)  
 > [2]: [注(po)册(jie)](http://bbs.eetop.cn/viewthread.php?tid=485257)  
+

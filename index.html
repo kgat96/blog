@@ -23,7 +23,132 @@
         </div>
     </header>
     <div id="wrapper">
-        <div id="content">            <h4 class="date">Aug 08, 2015</h4>
+        <div id="content">            <h4 class="date">Aug 15, 2015</h4>
+
+            <article class="post">
+                <h2 class="title">
+                    <a href="http://kgat96.github.io/pandaboard-bootload-process.html" rel="bookmark" title="Permanent Link to &quot;Pandaboard bootload(uboot) 启动流程探究&quot;">Pandaboard bootload(uboot) 启动流程探究</a>
+                </h2>
+
+                <blockquote>
+<p><strong>主要内容:</strong><br />
+之前使用的uboot都是直接编译就可以使用了, 但是作为一个愿意折腾的人, 这样的程度显然不够,<br />
+于是一如既往的打开了uboot的代码看起来吧!  </p>
+</blockquote>
+<h1>准备工作</h1>
+<p>1, Linux 64bit 系统电脑一台<br />
+2, 熟悉的编译器, 最好有代码引索功能的, 免得grep蛋疼<br />
+3, 下载源代码, 及芯片手册  </p>
+<h1>引导流程从这里开始</h1>
+<p><strong>寻找srart源头:</strong></p>
+<p>折腾过ARM的人必然知道, 系统启动前一定有一段汇编代码, 来设置时钟, 看门狗什么的.
+通过前面的文章, 我们了解uboot编译后生成了两个东西是我们需要的, MLO和u-boot.img,
+u-boot.img大家都知道, MLO是啥呢? 明显这个是omap4460启动时需要的, 而且是会自动
+加载的二进制文件(关于omap4460的自启动过程可以参看手册 &lt;27.1 Initialization Overview&gt;),
+那么启动的汇编代码应该就在MLO里了吧, 打开uboot代码的 Makefile (./Makefile), 发现  </p>
+<div class="highlight"><pre><span class="code-line"><span class="nf">./Makefile</span><span class="o">:</span>1222</span>
+<span class="code-line"><span class="nf">spl/u-boot-spl</span><span class="o">:</span> <span class="n">tools</span> <span class="n">prepare</span></span>
+<span class="code-line">    <span class="k">$(</span>Q<span class="k">)$(</span>MAKE<span class="k">)</span> <span class="nv">obj</span><span class="o">=</span>spl -f <span class="k">$(</span>srctree<span class="k">)</span>/scripts/Makefile.spl all</span>
+</pre></div>
+
+
+<p>spl在uboot里表示第二阶段启动代码, 其实就是芯片内部代码启动完后, 就会加载spl了,
+那估计就是我们说的MLO了, 继续看, MLO必然和 scripts/Makefile.spl 文件有关, 查看之  </p>
+<div class="highlight"><pre><span class="code-line"><span class="nf">scripts/Makefile.spl</span><span class="o">:</span>54</span>
+<span class="code-line"><span class="err">libs-</span><span class="k">$(</span><span class="nv">CONFIG_SPL_FRAMEWORK</span><span class="k">)</span> <span class="err">+=</span> <span class="err">common/spl/</span></span>
+<span class="code-line"><span class="err">libs-</span><span class="k">$(</span><span class="nv">CONFIG_SPL_LIBCOMMON_SUPPORT</span><span class="k">)</span> <span class="err">+=</span> <span class="err">common/</span></span>
+<span class="code-line"><span class="err">libs-</span><span class="k">$(</span><span class="nv">CONFIG_SPL_LIBDISK_SUPPORT</span><span class="k">)</span> <span class="err">+=</span> <span class="err">disk/</span></span>
+</pre></div>
+
+
+<p>这里只发现编译选项和编译内容, 貌似没什么线索了, 换一个想法, 编译的时候没看到, 是不是
+在连接的时候能够看到点什么呢, 于是飞快敲入:  </p>
+<div class="highlight"><pre><span class="code-line"><span class="p">$</span><span class="nv">make</span><span class="x"> V=1</span></span>
+<span class="code-line"><span class="x">   ....</span></span>
+<span class="code-line"><span class="x">   arm-none-linux-gnueabi-ld     -r -o spl/lib/built-in.o spl/lib/hashtable.o spl/lib/errno.o spl/lib/display_options.o spl/lib/crc32.o spl/lib/ctype.o spl/lib/div64.o spl/lib/hang.o spl/lib/linux_compat.o spl/lib/linux_string.o spl/lib/string.o spl/lib/time.o spl/lib/uuid.o spl/lib/vsprintf.o </span></span>
+<span class="code-line"><span class="x">  (cd spl &amp;&amp; arm-none-linux-gnueabi-ld   -T u-boot-spl.lds  --gc-sections -Bstatic --gc-sections -Ttext 0x40300000 arch/arm/cpu/armv7/start.o --start-group arch/arm/cpu/armv7/built-in.o arch/arm/cpu/built-in.o arch/arm/lib/built-in.o board/ti/panda/built-in.o common/spl/built-in.o common/built-in.o disk/built-in.o drivers/i2c/built-in.o drivers/gpio/built-in.o drivers/mmc/built-in.o drivers/serial/built-in.o fs/built-in.o lib/built-in.o --end-group arch/arm/lib/eabi_compat.o -L /mnt/ssd/arm-2014.05/bin/../lib/gcc/arm-none-linux-gnueabi/4.8.3/thumb2 -lgcc -Map u-boot-spl.map -o u-boot-spl)</span></span>
+<span class="code-line"><span class="x">   ....</span></span>
+</pre></div>
+
+
+<p>cd spl &amp;&amp; arm-none-linux-gnueabi-ld 连接是用的u-boot-spl.lds这个文件, 去看看:<br />
+(u-boot-spl.lds文件在uboot里有很多, 怎么判断? 在Makefile里找答案)</p>
+<div class="highlight"><pre><span class="code-line">arch/arm/cpu/armv7/omap-common/u-boot-spl.lds:0</span>
+<span class="code-line">MEMORY { .sram : ORIGIN = CONFIG_SPL_TEXT_BASE,\</span>
+<span class="code-line">        LENGTH = CONFIG_SPL_MAX_SIZE }</span>
+<span class="code-line">MEMORY { .sdram : ORIGIN = CONFIG_SPL_BSS_START_ADDR, \</span>
+<span class="code-line">        LENGTH = CONFIG_SPL_BSS_MAX_SIZE }</span>
+<span class="code-line"></span>
+<span class="code-line">OUTPUT_FORMAT(&quot;elf32-littlearm&quot;, &quot;elf32-littlearm&quot;, &quot;elf32-littlearm&quot;)</span>
+<span class="code-line">OUTPUT_ARCH(arm)</span>
+<span class="code-line">ENTRY(_start)</span>
+<span class="code-line">SECTIONS</span>
+<span class="code-line">{</span>
+<span class="code-line">    .text      :</span>
+<span class="code-line">    {</span>
+<span class="code-line">        __start = .;</span>
+<span class="code-line">        *(.vectors)</span>
+<span class="code-line">        arch/arm/cpu/armv7/start.o  (.text*)</span>
+<span class="code-line">        *(.text*)</span>
+<span class="code-line">    } &gt;.sram</span>
+</pre></div>
+
+
+<p>上面定义的两个内存段, 分别是sram, sdram. sram是芯片内部的一段存储区, sdram是DDR
+初始化完成后才能使用的地址区域.<br />
+.text段代码将全部放在sram中, 其中arch/arm/cpu/armv7/start.o里的.text段代码放在sram的
+最开始的地方. 那么start.S就是我们要找的东西啦, 打开一看, 果然就是熟悉而又陌生的汇编代码
+映满屏幕, 末要慌张, 听我慢慢分析, 其实很简单.</p>
+<p><strong>顺流而下, 柳暗花明:</strong></p>
+<p>打开start.S文件, 其实里面有很多注释, 已经足够我们去阅读这里的代码, 这里就会有人说了
+"里面的汇编代码我不知道具体的含义啊", 很早之前我也会有这样的问题, 但是我发现, 就算我
+当时能够很深入的探究, 当时算是相当明白的, 但是时间一久, 都会有遗忘, 看的时候还是要
+重新查, 所以我认为, 在没有很必要的时候我是不会区深入查看这些代码的, 能了解大概在做什么
+就好了.<br />
+这里也想赞一下国外码农的工程意识, 代码写的很有条理, 注释也非常详细, 值得我们学习.  </p>
+<p>这里我就列出主要调用流程:  </p>
+<div class="highlight"><pre><span class="code-line"><span class="cm">/* Allow the board to save important registers */</span><span class="w"></span></span>
+<span class="code-line">b<span class="w">   </span>save_boot_params<span class="w">  </span><span class="o">//</span><span class="w"> </span><span class="err">里实际上就是保存一下函数的返回地址</span><span class="w"></span></span>
+<span class="code-line"><span class="w">    </span><span class="o">|-</span><span class="w"> </span>disable<span class="w"> </span>interrupts<span class="w"></span></span>
+<span class="code-line"><span class="w">    </span><span class="o">|-</span><span class="w"> </span>b<span class="w"> </span>cpu_init_cp15<span class="w">  </span><span class="o">---&gt;</span><span class="w"> </span><span class="o">|-</span><span class="w"> </span>Invalidate<span class="w"> </span>L1<span class="w"> </span>I<span class="o">/</span>D<span class="w">  </span><span class="o">//</span><span class="w"> </span><span class="err">无效</span><span class="w"> </span><span class="err">指令</span><span class="o">/</span><span class="err">数据</span><span class="w"> </span><span class="err">缓存</span><span class="w"></span></span>
+<span class="code-line"><span class="w">    </span><span class="o">|</span><span class="w">                        </span><span class="o">|-</span><span class="w"> </span>disable<span class="w"> </span>MMU<span class="w">        </span><span class="o">//</span><span class="w"> </span><span class="err">方便后续的内存访问</span><span class="o">,</span><span class="w"> </span><span class="err">不需要填写</span>TLB<span class="w"></span></span>
+<span class="code-line"><span class="w">    </span><span class="o">|</span><span class="w"></span></span>
+<span class="code-line"><span class="w">    </span><span class="o">|-</span><span class="w"> </span>b<span class="w"> </span>cpu_init_crit<span class="w">  </span><span class="o">---&gt;</span><span class="w"> </span><span class="o">|-</span><span class="w"> </span>b<span class="w"> </span>lowlevel_init<span class="w"> </span><span class="o">--&gt;</span><span class="w"> </span><span class="o">|-</span><span class="w"> </span>Setup<span class="w"> </span>a<span class="w"> </span>temporary<span class="w"> </span>stack<span class="w"> </span><span class="o">//</span><span class="w"> </span><span class="err">设置</span>SP指针<span class="o">,</span><span class="w"> </span><span class="err">估计马上要跑</span>C代码了<span class="w"></span></span>
+<span class="code-line"><span class="w">    </span><span class="o">|</span><span class="w">                                               </span><span class="o">|-</span><span class="w"> </span>b<span class="w"> </span>s_init<span class="w"> </span><span class="o">--&gt;</span><span class="w"> </span><span class="o">|-</span><span class="w"> </span>init_omap_revision<span class="w"> </span><span class="o">//</span><span class="w"> </span><span class="err">获取芯片</span>ID<span class="w"></span></span>
+<span class="code-line"><span class="w">    </span><span class="o">|</span><span class="w">                                                               </span><span class="o">|-</span><span class="w"> </span>watchdog_init<span class="w"> </span><span class="o">//</span><span class="w"> </span><span class="err">初始化看门狗</span><span class="w"></span></span>
+<span class="code-line"><span class="w">    </span><span class="o">|</span><span class="w">                                                               </span><span class="o">|-</span><span class="w"> </span>force_emif_self_refresh<span class="o">()</span><span class="err">;</span><span class="w"> </span><span class="o">//</span><span class="w"> </span><span class="err">初始化</span>DDR<span class="w"></span></span>
+<span class="code-line"><span class="w">    </span><span class="o">|</span><span class="w">                                                               </span><span class="o">|-</span><span class="w"> </span>setup_clocks_for_console<span class="w"> </span><span class="o">//</span><span class="w"> </span><span class="err">开时钟等工作</span><span class="w"></span></span>
+<span class="code-line"><span class="w">    </span><span class="o">|-</span><span class="w"> </span>b<span class="w"> </span>_main<span class="w"> </span><span class="o">--&gt;</span><span class="w"> </span><span class="o">|-</span><span class="w"> </span>setup<span class="w"> </span>SP<span class="w"> </span><span class="o">//</span><span class="w"> </span>Set<span class="w"> </span>up<span class="w"> </span>initial<span class="w"> </span>C<span class="w"> </span>runtime<span class="w"> </span>environment<span class="w"></span></span>
+<span class="code-line"><span class="w">                   </span><span class="o">|-</span><span class="w"> </span>relocate_code<span class="w"> </span><span class="o">//</span><span class="w"> </span><span class="err">代码从定位</span><span class="w"></span></span>
+<span class="code-line"><span class="w">                   </span><span class="o">|-</span><span class="w"> </span>clear<span class="w"> </span>BSS<span class="w"></span></span>
+<span class="code-line"><span class="w">                   </span><span class="o">|-</span><span class="w"> </span>ldr<span class="w"> </span>pc<span class="o">,</span><span class="w"> </span><span class="o">=</span>board_init_r<span class="w"> </span><span class="o">//</span><span class="w"> </span><span class="err">正式进入</span>uboot地界<span class="w"></span></span>
+<span class="code-line"></span>
+<span class="code-line"><span class="err">相关文件地址:</span><span class="w"></span></span>
+<span class="code-line">arch<span class="o">/</span>arm<span class="o">/</span>cpu<span class="o">/</span>armv7<span class="o">/</span>start<span class="o">.</span>S<span class="w"></span></span>
+<span class="code-line">arch<span class="o">/</span>arm<span class="o">/</span>cpu<span class="o">/</span>armv7<span class="o">/</span>lowlevel_init<span class="o">.</span>S<span class="w"></span></span>
+<span class="code-line">arch<span class="o">/</span>arm<span class="o">/</span>cpu<span class="o">/</span>armv7<span class="o">/</span>omap<span class="o">-</span>common<span class="o">/</span>hwinit<span class="o">-</span>common<span class="o">.</span>c<span class="w"></span></span>
+<span class="code-line">arch<span class="o">/</span>arm<span class="o">/</span>lib<span class="o">/</span>crt0<span class="o">.</span>S<span class="w"></span></span>
+<span class="code-line">arch<span class="o">/</span>arm<span class="o">/</span>lib<span class="o">/</span>board<span class="o">.</span>c<span class="w"></span></span>
+</pre></div>
+
+
+<p>上面展示东西不多, 但是包含的东西确是大大滴多啊, 涉及的基础知识很多, 如计算机理论, 编译连接 等, 
+是不是瞬间有了"望尽天涯路"的感觉.</p>
+<blockquote>
+<p>参考资料:<br />
+[1]: <a href="http://www.denx.de/wiki/U-Boot">Universal Boot Loader </a><br />
+[2]: <a href="http://www.ti.com/product/omap4460">TI omap4460</a>  </p>
+</blockquote>
+                <div class="clear"></div>
+
+                <div class="info">
+                    <a href="http://kgat96.github.io/pandaboard-bootload-process.html">posted at 12:00</a>
+                    &nbsp;&middot;&nbsp;<a href="http://kgat96.github.io/category/.html" rel="tag"></a>
+                    &nbsp;&middot;
+                    &nbsp;<a href="http://kgat96.github.io/tag/uboot.html" class="tags">uboot</a>
+                    &nbsp;<a href="http://kgat96.github.io/tag/pandaboard.html" class="tags">pandaboard</a>
+                </div>
+            </article>            <h4 class="date">Aug 08, 2015</h4>
 
             <article class="post">
                 <h2 class="title">
@@ -48,7 +173,7 @@
 
 
 <p>2, 安装</p>
-<p>这里你就直接运行它就可以了, 中间需要你选择安装路径什么的, 相信你都会把 :)</p>
+<p>这里你就直接运行它就可以了, 中间需要你选择安装路径什么的, 相信你都会吧 :)</p>
 <p>安装好后 就可以直接运行了:</p>
 <div class="highlight"><pre><span class="code-line">./altera/15.0/quartus/bin/quartus --64bit</span>
 </pre></div>
