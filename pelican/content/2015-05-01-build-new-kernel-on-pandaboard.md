@@ -1,17 +1,14 @@
 Title: PandaBoard ES 下 Kernel 4.0.0 的移植
 Date: 2015-05-01 10:00
-Category:
 Tags: Pandaboard
 Slug: build-new-kernel-on-pandaboard
 Author: Kage Shen
-Summary:
 
-> **主要内容:**
+> ###主要内容:
 > 实际上 **Kernel 4.0.0** 已经支持 [PandaBoard](http://pandaboard.org) 的，应该是 **Kernel** 主分支都是支持这块板子的，只是在实际让最新 Kernel 跑起来的过程中还是有一些问题的，所以本文就是告诉你一步步让它跑起来的。
 >
 
-准备工作
-=======
+###准备工作  
 
 1，可以正常使用的开发板一个
 
@@ -24,7 +21,7 @@ Summary:
  - **下载 arm-gcc 编译器**
 
 
-```
+```bash
 arm-2014.05-29-arm-none-linux-gnueabi-i686-pc-linux-gnu.tar.bz2
 #arm-none-linux-gnueabi-gcc -v
 gcc version 4.8.3 20140320 (prerelease) (Sourcery CodeBench Lite 2014.05-29)
@@ -32,7 +29,7 @@ gcc version 4.8.3 20140320 (prerelease) (Sourcery CodeBench Lite 2014.05-29)
 
  - **同步库 linux-omap (Kernel)**
 
-```
+```bash
 #git clone git://git.kernel.org/pub/scm/linux/kernel/git/tmlind/linux-omap.git
 ```
 
@@ -40,22 +37,22 @@ gcc version 4.8.3 20140320 (prerelease) (Sourcery CodeBench Lite 2014.05-29)
 
  > 原生库在  [www.denx.de](http://www.denx.de) 非常慢
 
-```
+```bash
 #git clone https://github.com/RobertCNelson/u-boot.git
 ```
 
  - **下载根文件系统 (ubuntu-14.04.2)**
 
-```
-wget -c https://rcn-ee.com/rootfs/eewiki/minfs/ubuntu-14.04.2-minimal-armhf-2015-04-27.tar.xz
+```bash
+#wget -c https://rcn-ee.com/rootfs/eewiki/minfs/ubuntu-14.04.2-minimal-armhf-2015-04-27.tar.xz
 ```
 
-让它板子飞起来
-====
+###让它板子飞起来
+
 
  **1，格式化&制作启动分区**
 
-```
+```bash
 #fdisk -l
 Disk /dev/sdc: 1.9 GiB, 2014838784 bytes, 3935232 sectors
 Units: sectors of 1 * 512 = 512 bytes
@@ -82,7 +79,7 @@ Device     Boot  Start     End Sectors  Size Id Type
 
 那么编译自然也和Kernel一样啦，这里先不对Uboot做修改，免得大家看不懂哈
 
-```
+```bash
 #export ARCH=arm
 #export CROSS_COMPILE=arm-none-linux-gnueabi-
 #make omap4_panda_defconfig
@@ -109,7 +106,7 @@ Device     Boot  Start     End Sectors  Size Id Type
 
 编译之前我们需要做件事情，开启启动时候的打印 (**EARLY_PRINTK**)
 
-```
+```bash
 patch to omap2plus_defconfig:
 +CONFIG_DEBUG_LL=y
 +CONFIG_DEBUG_OMAP4UART3=y
@@ -118,7 +115,7 @@ patch to omap2plus_defconfig:
 +CONFIG_EARLY_PRINTK=y
 ```
 
-```
+```bash
 export ARCH=arm
 export CROSS_COMPILE=arm-none-linux-gnueabi-
 make omap2plus_defconfig
@@ -144,9 +141,10 @@ mkimage -A arm -O linux -T kernel -C none -a 0x80008000 -e 0x80008000 \
 > 这里 omap4-panda-es.dtb 就是板级配置文件了，上面是将他和 zImage 和到了一起，实际上还有一种
 > 更加灵活的方法，就是动态加载 dtb 文件，并加载相同的 zImage，下面提供 Uboot 动态加载命令：
 
-```
+<pre class="prettyprint">
 > Panda # load mmc 0 zImage 0x81000000
 > Panda # load mmc 0 omap4-panda-es.dtb x81f00000
 > Panda # bootz 0x81000000 - 0x81f00000
-```
+</pre>
+
 

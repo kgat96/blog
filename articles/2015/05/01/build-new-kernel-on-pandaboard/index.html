@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+        <title>PandaBoard ES 下 Kernel 4.0.0 的移植</title>
+        <meta charset="utf-8" />
+        <link href="http://kgat96.github.io/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="Kage's Blog Full Atom Feed" />
+
+
+        <!-- Mobile viewport optimized: j.mp/bplateviewport -->
+        <meta name="viewport" content="width=device-width,initial-scale=1, maximum-scale=1">
+
+        <link rel="stylesheet" type="text/css" href="http://kgat96.github.io/theme/gumby.css" />
+        <link rel="stylesheet" type="text/css" href="http://kgat96.github.io/theme/style.css" />
+        <link rel="stylesheet" type="text/css" href="http://kgat96.github.io/theme/pygment.css" />
+
+        <script src="http://kgat96.github.io/theme/js/libs/modernizr-2.6.2.min.js"></script>
+
+<script src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js"></script>
+
+
+</head>
+
+<body id="index" class="home">
+
+
+    <div class="container">
+
+        <div class="row">
+
+          <header id="banner" class="body">
+                  <h1><a href="http://kgat96.github.io">Kage's Blog <strong>Stay Hungry, Stay Foolish.</strong></a></h1>
+          </header><!-- /#banner -->
+
+            <div id="navigation" class="navbar row">
+              <a href="#" gumby-trigger="#navigation &gt; ul" class="toggle"><i class="icon-menu"></i></a>
+             
+              <ul class="columns">
+                <li><a href="/">Home</a></li>
+
+				<li><a href="/functions/archives.html">Archives</a></li>
+				<!--
+					<li><a href="/functions/tags.html">Tags</a></li>
+					<li><a href="/functions/archives.html">Archives</a></li>
+				
+				-->
+              </ul>
+            </div>
+
+<section id="content" class="body">
+
+   <div class="row">
+        <div class="eleven columns">
+
+
+            <header>
+              <h2 class="entry-title">
+                <a href="http://kgat96.github.io/articles/2015/05/01/build-new-kernel-on-pandaboard/" rel="bookmark"
+                   title="Permalink to PandaBoard ES 下 Kernel 4.0.0 的移植">PandaBoard ES 下 Kernel 4.0.0 的移植</a></h2>
+           
+            </header>
+            <footer class="post-info">
+              <!--
+			  <abbr class="published" title="2015-05-01T10:00:00+08:00">
+                Fri 01 May 2015
+              </abbr>
+              <address class="vcard author">
+                By <a class="url fn" href="http://kgat96.github.io/author/kage-shen.html">Kage Shen</a>
+              </address>
+			  -->
+			  <address class="vcard author" style="font-style:italic;margin-bottom:-10px;">
+				Fri 01 May 2015
+					&nbsp;&nbsp;Write By <a class="url fn" href="http://kgat96.github.io/author/kage-shen.html">Kage Shen</a>
+	
+			  </address>
+			  <hr />			  
+            </footer><!-- /.post-info -->
+            <div class="entry-content">
+              <blockquote>
+<h3>主要内容:</h3>
+<p>实际上 <strong>Kernel 4.0.0</strong> 已经支持 <a href="http://pandaboard.org">PandaBoard</a> 的，应该是 <strong>Kernel</strong> 主分支都是支持这块板子的，只是在实际让最新 Kernel 跑起来的过程中还是有一些问题的，所以本文就是告诉你一步步让它跑起来的。
+</p>
+</blockquote>
+<h3>准备工作</h3>
+<p>1，可以正常使用的开发板一个</p>
+<p>2，Linux系统电脑一台</p>
+<p>3，&gt; 2G SD卡一张</p>
+<p>4，搭建编译环境</p>
+<ul>
+<li><strong>下载 arm-gcc 编译器</strong></li>
+</ul>
+<div class="highlight"><pre><span></span>arm-2014.05-29-arm-none-linux-gnueabi-i686-pc-linux-gnu.tar.bz2
+<span class="c1">#arm-none-linux-gnueabi-gcc -v</span>
+gcc version 4.8.3 <span class="m">20140320</span> <span class="o">(</span>prerelease<span class="o">)</span> <span class="o">(</span>Sourcery CodeBench Lite 2014.05-29<span class="o">)</span>
+</pre></div>
+
+
+<ul>
+<li><strong>同步库 linux-omap (Kernel)</strong></li>
+</ul>
+<div class="highlight"><pre><span></span><span class="c1">#git clone git://git.kernel.org/pub/scm/linux/kernel/git/tmlind/linux-omap.git</span>
+</pre></div>
+
+
+<ul>
+<li><strong>同步库 uboot (bootloader)</strong></li>
+</ul>
+<blockquote>
+<p>原生库在  <a href="http://www.denx.de">www.denx.de</a> 非常慢</p>
+</blockquote>
+<div class="highlight"><pre><span></span><span class="c1">#git clone https://github.com/RobertCNelson/u-boot.git</span>
+</pre></div>
+
+
+<ul>
+<li><strong>下载根文件系统 (ubuntu-14.04.2)</strong></li>
+</ul>
+<div class="highlight"><pre><span></span><span class="c1">#wget -c https://rcn-ee.com/rootfs/eewiki/minfs/ubuntu-14.04.2-minimal-armhf-2015-04-27.tar.xz</span>
+</pre></div>
+
+
+<h3>让它板子飞起来</h3>
+<p><strong>1，格式化&amp;制作启动分区</strong></p>
+<div class="highlight"><pre><span></span><span class="c1">#fdisk -l</span>
+Disk /dev/sdc: 1.9 GiB, <span class="m">2014838784</span> bytes, <span class="m">3935232</span> sectors
+Units: sectors of <span class="m">1</span> * <span class="nv">512</span> <span class="o">=</span> <span class="m">512</span> bytes
+Sector size <span class="o">(</span>logical/physical<span class="o">)</span>: <span class="m">512</span> bytes / <span class="m">512</span> bytes
+I/O size <span class="o">(</span>minimum/optimal<span class="o">)</span>: <span class="m">512</span> bytes / <span class="m">512</span> bytes
+Disklabel type: dos
+Disk identifier: 0xfb04e098
+
+Device     Boot  Start     End Sectors  Size Id Type
+/dev/sdc1  *      <span class="m">2048</span>  <span class="m">264191</span>  <span class="m">262144</span>  128M  c W95 FAT32 <span class="o">(</span>LBA<span class="o">)</span>
+/dev/sdc2       <span class="m">264192</span> <span class="m">3935231</span> <span class="m">3671040</span>  1.8G <span class="m">83</span> Linux
+</pre></div>
+
+
+<p><strong><em>这里有两点要注意：</em></strong></p>
+<ul>
+<li>第一个分区一定是 W95 FAT32 (LBA) 格式</li>
+<li>第一个分区一定是可以引导的，既有 Boot *</li>
+</ul>
+<p><strong>2，编译 Uboot</strong></p>
+<p>最新的Uboot整的和Kernel的一样的图形化的配置界面了，略屌.</p>
+<p><img alt="uboot menuconfig" src="http://7xigc2.com1.z0.glb.clouddn.com/build-new-kernel-on-pandaboard-p1.png" /></p>
+<p>那么编译自然也和Kernel一样啦，这里先不对Uboot做修改，免得大家看不懂哈</p>
+<div class="highlight"><pre><span></span><span class="c1">#export ARCH=arm</span>
+<span class="c1">#export CROSS_COMPILE=arm-none-linux-gnueabi-</span>
+<span class="c1">#make omap4_panda_defconfig</span>
+<span class="c1">#make -j8</span>
+  ...
+  OBJCOPY u-boot.bin
+  MKIMAGE u-boot.img
+  OBJCOPY u-boot.srec
+  CC      spl/common/spl/spl.o
+  LD      spl/common/spl/built-in.o
+  CC      spl/lib/display_options.o
+  LD      spl/lib/built-in.o
+  LD      spl/u-boot-spl
+  OBJCOPY spl/u-boot-spl.bin
+  MKIMAGE MLO
+</pre></div>
+
+
+<p>这里生成了几个比较重要的文件  <strong>MLO、u-boot.img</strong></p>
+<ul>
+<li><strong>MLO：</strong> TI x-loader 第二引导阶段的执行文件，omap启动的时候会读取这个文件，并load进内存</li>
+<li><strong>u-boot.img：</strong> 这个不解释了</li>
+</ul>
+<p><strong>2，编译 Kernel</strong></p>
+<p>编译之前我们需要做件事情，开启启动时候的打印 (<strong>EARLY_PRINTK</strong>)</p>
+<div class="highlight"><pre><span></span>patch to omap2plus_defconfig:
++CONFIG_DEBUG_LL<span class="o">=</span>y
++CONFIG_DEBUG_OMAP4UART3<span class="o">=</span>y
++CONFIG_DEBUG_OMAP2PLUS_UART<span class="o">=</span>y
++CONFIG_DEBUG_LL_INCLUDE<span class="o">=</span><span class="s2">&quot;debug/omap2plus.S&quot;</span>
++CONFIG_EARLY_PRINTK<span class="o">=</span>y
+</pre></div>
+
+
+<div class="highlight"><pre><span></span><span class="nb">export</span> <span class="nv">ARCH</span><span class="o">=</span>arm
+<span class="nb">export</span> <span class="nv">CROSS_COMPILE</span><span class="o">=</span>arm-none-linux-gnueabi-
+make omap2plus_defconfig
+make zImage -j8  // 这里就使用zImage就可以了
+make dtbs
+cat arch/arm/boot/zImage arch/arm/boot/dts/omap4-panda-es.dtb &gt; /tmp/appended
+mkimage -A arm -O linux -T kernel -C none -a 0x80008000 -e 0x80008000 <span class="se">\</span>
+         -n <span class="s2">&quot;Linux&quot;</span> -d /tmp/appended /tmp/uImage
+</pre></div>
+
+
+<p>这里最后生成了uImage，那为什么不用 <strong>make uImage</strong> 来一步生成呢，当然你可以先测试一下看看。
+实际上从 linux 3.10 后，代码库就开始使用 dtbs 文件来描述板机配置，问什么，大家自己了解吧。</p>
+<p><strong>3，制作启动SD卡</strong></p>
+<p>拷贝刚才生成的 <strong>uImage MLO u-boot.img</strong> 到第一个分区，将下载的 <strong>ubuntu-14.04.2-minimal-armhf-2015-04-27.tar.xz</strong> 解压到第二个分区。</p>
+<p>好了终于可以看到他启动了 : )</p>
+<p><img alt="boot log" src="http://7xigc2.com1.z0.glb.clouddn.com/build-new-kernel-on-pandaboard-p2.png" /></p>
+<blockquote>
+<p><strong>Note:</strong>
+这里 omap4-panda-es.dtb 就是板级配置文件了，上面是将他和 zImage 和到了一起，实际上还有一种
+更加灵活的方法，就是动态加载 dtb 文件，并加载相同的 zImage，下面提供 Uboot 动态加载命令：</p>
+</blockquote>
+<pre class="prettyprint">
+> Panda # load mmc 0 zImage 0x81000000
+> Panda # load mmc 0 omap4-panda-es.dtb x81f00000
+> Panda # bootz 0x81000000 - 0x81f00000
+</pre>
+            </div><!-- /.entry-content -->
+			
+			
+			<ul style="float:right;">
+				<li>
+					►&nbsp;&nbsp;<a href="http://kgat96.github.io/articles/2015/05/31/debug-for-usb-gadget-ethernet/">
+						PandaBoard ES USB Gadget Ethernet
+					</a>
+				</li>
+			</ul>
+			
+			
+            <div class="comments">
+              <h3>Comments</h3>
+              <div id="disqus_thread"></div>
+              <script type="text/javascript">
+                var disqus_identifier = "articles/2015/05/01/build-new-kernel-on-pandaboard/";
+                (function() {
+                var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+                dsq.src = 'http://kgat96.disqus.com/embed.js';
+                (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+                })();
+              </script>
+            </div>
+
+
+        </div><!-- /.eleven.columns -->
+
+<div class="three columns">
+
+<div class="sidebarbg">
+	<h4>Pages</h4>
+	<ul>
+		  <li><a href="/functions/tags.html">Tags</a></li>
+		  <li><a href="/functions/archives.html">Archives</a></li>
+	</ul>
+</div>
+
+
+
+
+<div class="social sidebarbg">
+	<nav class="widget">
+	  <h4>Social</h4>
+	  <ul>
+		<li><a target="_blank" href="https://github.com/">GitHub</a></li>
+		<li><a target="_blank" href="https://www.facebook.com/">FaceBook</a></li>
+	  </ul>
+	</nav>
+</div>
+
+<nav class="widget sidebarbg">
+  <h4>Links</h4>
+  <ul>
+	<li><a target="_blank" href="http://getpelican.com/">Pelican</a></li>
+	<li><a target="_blank" href="http://python.org/">Python.org</a></li>
+	<li><a target="_blank" href="http://jinja.pocoo.org/">Jinja2</a></li>
+  </ul>
+</nav>
+
+</div> </div><!-- /.row -->
+
+
+</section>
+
+       </div><!-- /.row -->
+    </div><!-- /.container -->
+
+
+       <div class="container.nopad bg">
+
+    
+        <footer id="credits" class="row">
+          <div class="seven columns left-center">
+
+                   <address id="about" class="vcard body">
+                    Proudly powered by <a href="http://getpelican.com/">Pelican</a>,
+                    which takes great advantage of <a href="http://python.org">Python</a>.
+                    <br />
+                    Based on the <a target="_blank" href="http://gumbyframework.com">Gumby Framework</a>
+                    </address>
+          </div>
+
+
+          <div class="seven columns">
+            <div class="row">
+              <ul class="socbtns">
+
+                <li><div class="btn primary"><a href="https://github.com/" target="_blank">Github</a></div></li>
+
+
+                <li><div class="btn facebook"><a href="https://www.facebook.com/" target="_blank">Facebook</a></div></li>
+
+
+              </ul>
+            </div>
+          </div>
+        </footer>
+
+    </div>
+
+
+<script type="text/javascript">
+    var disqus_shortname = 'kgat96';
+    (function () {
+        var s = document.createElement('script'); s.async = true;
+        s.type = 'text/javascript';
+        s.src = 'http://' + disqus_shortname + '.disqus.com/count.js';
+        (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+    }());
+</script>
+  <script src="http://kgat96.github.io/theme/js/libs/jquery-1.9.1.min.js"></script>
+  <script src="http://kgat96.github.io/theme/js/libs/gumby.min.js"></script>
+  <script src="http://kgat96.github.io/theme/js/plugins.js"></script>
+	<script>
+	(function() {
+		var $backToTopTxt = "返回顶部", $backToTopEle = $('<div class="backToTop"></div>').appendTo($("body"))
+			.text($backToTopTxt).attr("title", $backToTopTxt).click(function() {
+				$("html, body").animate({ scrollTop: 0 }, 120);
+		}), $backToTopFun = function() {
+			var st = $(document).scrollTop(), winh = $(window).height();
+			(st > 0)? $backToTopEle.show(): $backToTopEle.hide();
+			//IE6下的定位
+			if (!window.XMLHttpRequest) {
+				$backToTopEle.css("top", st + winh - 166);
+			}
+		};
+		$(window).bind("scroll", $backToTopFun);
+		$(function() { $backToTopFun(); });
+	})();
+	</script>
+</body>
+</html>

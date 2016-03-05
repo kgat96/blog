@@ -1,254 +1,165 @@
 <!DOCTYPE html>
-<html lang="zh">
+<html lang="en">
 <head>
-    <meta charset="utf-8" />
-    <title>Kage's Blog | articles tagged "Pandaboard"</title>
-    <link rel="shortcut icon" type="image/png" href="http://kgat96.github.io/favicon.png">
-    <link rel="shortcut icon" type="image/x-icon" href="http://kgat96.github.io/favicon.ico">
-    <link rel="stylesheet" href="http://kgat96.github.io/theme/css/screen.css" type="text/css" />
-    <link rel="stylesheet" href="http://kgat96.github.io/theme/css/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="http://kgat96.github.io/theme/css/print.css" type="text/css" media="print" />
-    <meta name="generator" content="Pelican" />
+
+        <title>Kage's Blog - pandaboard</title>
+        <meta charset="utf-8" />
+        <link href="http://kgat96.github.io/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="Kage's Blog Full Atom Feed" />
+
+
+        <!-- Mobile viewport optimized: j.mp/bplateviewport -->
+        <meta name="viewport" content="width=device-width,initial-scale=1, maximum-scale=1">
+
+        <link rel="stylesheet" type="text/css" href="http://kgat96.github.io/theme/gumby.css" />
+        <link rel="stylesheet" type="text/css" href="http://kgat96.github.io/theme/style.css" />
+        <link rel="stylesheet" type="text/css" href="http://kgat96.github.io/theme/pygment.css" />
+
+        <script src="http://kgat96.github.io/theme/js/libs/modernizr-2.6.2.min.js"></script>
+
+<script src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js"></script>
+
+
 </head>
-<body>
-    <header>
-        <nav>
-            <ul>
-                <li class="ephemeral selected"><a href="http://kgat96.github.io/tag/pandaboard.html">Pandaboard</a></li>
-                <li><a href="http://kgat96.github.io">Home</a></li>
-                <li><a href="http://kgat96.github.io/archives">Archives</a></li>
-            </ul>
-        </nav>
-        <div class="header_box">
-            <h1><a href="http://kgat96.github.io">Kage's Blog</a></h1>
-        </div>
-    </header>
-    <div id="wrapper">
-        <div id="content">            <h4 class="date">Aug 15, 2015</h4>
 
-            <article class="post">
-                <h2 class="title">
-                    <a href="http://kgat96.github.io/pandaboard-bootload-process.html" rel="bookmark" title="Permanent Link to &quot;Pandaboard bootload(uboot) 启动流程探究&quot;">Pandaboard bootload(uboot) 启动流程探究</a>
-                </h2>
+<body id="index" class="home">
 
-                <blockquote>
-<p><strong>主要内容:</strong><br />
-之前使用的uboot都是直接编译就可以使用了, 但是作为一个愿意折腾的人, 这样的程度显然不够,<br />
+
+    <div class="container">
+
+        <div class="row">
+
+          <header id="banner" class="body">
+                  <h1><a href="http://kgat96.github.io">Kage's Blog <strong>Stay Hungry, Stay Foolish.</strong></a></h1>
+          </header><!-- /#banner -->
+
+            <div id="navigation" class="navbar row">
+              <a href="#" gumby-trigger="#navigation &gt; ul" class="toggle"><i class="icon-menu"></i></a>
+             
+              <ul class="columns">
+                <li><a href="/">Home</a></li>
+
+				<li><a href="/functions/archives.html">Archives</a></li>
+				<!--
+					<li><a href="/functions/tags.html">Tags</a></li>
+					<li><a href="/functions/archives.html">Archives</a></li>
+				
+				-->
+              </ul>
+            </div>
+
+<section id="content">
+
+   <div class="row">
+
+        <div class="eleven columns">
+
+		
+		         <ol id="post-list">
+				        <li><article class="hentry">
+				                <header> <h2 class="entry-title"><a href="http://kgat96.github.io/articles/2015/08/15/pandaboard-bootload-process/" rel="bookmark" title="Permalink to Pandaboard bootload(uboot) 启动流程探究">Pandaboard bootload(uboot) 启动流程探究</a></h2> </header>
+				                <footer class="post-info">
+				                    <!--<abbr class="published" title="2015-08-15T12:00:00+08:00"> Sat 15 August 2015 </abbr>
+<address class="vcard author">By <a class="url fn" href="http://kgat96.github.io/author/kage-shen.html">Kage Shen</a></address>-->
+								 <address class="vcard author" style="font-style:italic;">
+									Sat 15 August 2015
+										&nbsp;&nbsp;Write By <a class="url fn" href="http://kgat96.github.io/author/kage-shen.html">Kage Shen</a>
+								  </address>
+									
+				                </footer><!-- /.post-info -->
+				                <div class="entry-content"> <blockquote>
+<h3>主要内容:</h3>
+<p>之前使用的uboot都是直接编译就可以使用了, 但是作为一个愿意折腾的人, 这样的程度显然不够,<br />
 于是一如既往的打开了uboot的代码看起来吧!  </p>
 </blockquote>
-<h1>准备工作</h1>
+<h3>准备工作</h3>
 <p>1, Linux 64bit 系统电脑一台<br />
 2, 熟悉的编译器, 最好有代码引索功能的, 免得grep蛋疼<br />
 3, 下载源代码, 及芯片手册  </p>
-<h1>引导流程从这里开始</h1>
+<h3>引导流程从这里开始</h3>
 <p><strong>寻找srart源头:</strong></p>
 <p>折腾过ARM的人必然知道, 系统启动前一定有一段汇编代码, 来设置时钟, 看门狗什么的.
 通过前面的文章, 我们了解uboot编译后生成了两个东西是我们需要的, MLO和u-boot.img,
 u-boot.img大家都知道, MLO是啥呢? 明显这个是omap4460启动时需要的, 而且是会自动
 加载的二进制文件(关于omap4460的自启动过程可以参看手册 &lt;27.1 Initialization Overview&gt;),
 那么启动的汇编代码应该就在MLO里了吧, 打开uboot代码的 Makefile (./Makefile), 发现  </p>
-<div class="highlight"><pre><span class="code-line"><span class="nf">./Makefile</span><span class="o">:</span>1222</span>
-<span class="code-line"><span class="nf">spl/u-boot-spl</span><span class="o">:</span> <span class="n">tools</span> <span class="n">prepare</span></span>
-<span class="code-line">    <span class="k">$(</span>Q<span class="k">)$(</span>MAKE<span class="k">)</span> <span class="nv">obj</span><span class="o">=</span>spl -f <span class="k">$(</span>srctree<span class="k">)</span>/scripts/Makefile.spl all</span>
-</pre></div>
+<div class="highlight"><pre><span></span>./Makefile:1222
+spl/u-boot-spl: tools prepare
+    <span class="k">$(</span>Q ...</pre></div> </div><!-- /.entry-content -->
+
+								<div class="medium primary btn"><a href="http://kgat96.github.io/articles/2015/08/15/pandaboard-bootload-process/" rel="bookmark" title="Permalink to Pandaboard bootload(uboot) 启动流程探究">Read more <i class="icon-arrow-right"></i></a></div>
 
 
-<p>spl在uboot里表示第二阶段启动代码, 其实就是芯片内部代码启动完后, 就会加载spl了,
-那估计就是我们说的MLO了, 继续看, MLO必然和 scripts/Makefile.spl 文件有关, 查看之  </p>
-<div class="highlight"><pre><span class="code-line"><span class="nf">scripts/Makefile.spl</span><span class="o">:</span>54</span>
-<span class="code-line"><span class="err">libs-</span><span class="k">$(</span><span class="nv">CONFIG_SPL_FRAMEWORK</span><span class="k">)</span> <span class="err">+=</span> <span class="err">common/spl/</span></span>
-<span class="code-line"><span class="err">libs-</span><span class="k">$(</span><span class="nv">CONFIG_SPL_LIBCOMMON_SUPPORT</span><span class="k">)</span> <span class="err">+=</span> <span class="err">common/</span></span>
-<span class="code-line"><span class="err">libs-</span><span class="k">$(</span><span class="nv">CONFIG_SPL_LIBDISK_SUPPORT</span><span class="k">)</span> <span class="err">+=</span> <span class="err">disk/</span></span>
-</pre></div>
+
+								<div class="row tag-row">
+										<span>Tagged as : </span>
+											<a class="danger label" href="http://kgat96.github.io/tag/uboot.html">uboot</a>
+											<a class="danger label" href="http://kgat96.github.io/tag/pandaboard.html">pandaboard</a>
+								</div>
 
 
-<p>这里只发现编译选项和编译内容, 貌似没什么线索了, 换一个想法, 编译的时候没看到, 是不是
-在连接的时候能够看到点什么呢, 于是飞快敲入:  </p>
-<div class="highlight"><pre><span class="code-line"><span class="p">$</span><span class="nv">make</span><span class="x"> V=1</span></span>
-<span class="code-line"><span class="x">   ....</span></span>
-<span class="code-line"><span class="x">   arm-none-linux-gnueabi-ld     -r -o spl/lib/built-in.o spl/lib/hashtable.o spl/lib/errno.o spl/lib/display_options.o spl/lib/crc32.o spl/lib/ctype.o spl/lib/div64.o spl/lib/hang.o spl/lib/linux_compat.o spl/lib/linux_string.o spl/lib/string.o spl/lib/time.o spl/lib/uuid.o spl/lib/vsprintf.o </span></span>
-<span class="code-line"><span class="x">  (cd spl &amp;&amp; arm-none-linux-gnueabi-ld   -T u-boot-spl.lds  --gc-sections -Bstatic --gc-sections -Ttext 0x40300000 arch/arm/cpu/armv7/start.o --start-group arch/arm/cpu/armv7/built-in.o arch/arm/cpu/built-in.o arch/arm/lib/built-in.o board/ti/panda/built-in.o common/spl/built-in.o common/built-in.o disk/built-in.o drivers/i2c/built-in.o drivers/gpio/built-in.o drivers/mmc/built-in.o drivers/serial/built-in.o fs/built-in.o lib/built-in.o --end-group arch/arm/lib/eabi_compat.o -L /mnt/ssd/arm-2014.05/bin/../lib/gcc/arm-none-linux-gnueabi/4.8.3/thumb2 -lgcc -Map u-boot-spl.map -o u-boot-spl)</span></span>
-<span class="code-line"><span class="x">   ....</span></span>
-</pre></div>
 
-
-<p>cd spl &amp;&amp; arm-none-linux-gnueabi-ld 连接是用的u-boot-spl.lds这个文件, 去看看:<br />
-(u-boot-spl.lds文件在uboot里有很多, 怎么判断? 在Makefile里找答案)</p>
-<div class="highlight"><pre><span class="code-line">arch/arm/cpu/armv7/omap-common/u-boot-spl.lds:0</span>
-<span class="code-line">MEMORY { .sram : ORIGIN = CONFIG_SPL_TEXT_BASE,\</span>
-<span class="code-line">        LENGTH = CONFIG_SPL_MAX_SIZE }</span>
-<span class="code-line">MEMORY { .sdram : ORIGIN = CONFIG_SPL_BSS_START_ADDR, \</span>
-<span class="code-line">        LENGTH = CONFIG_SPL_BSS_MAX_SIZE }</span>
-<span class="code-line"></span>
-<span class="code-line">OUTPUT_FORMAT(&quot;elf32-littlearm&quot;, &quot;elf32-littlearm&quot;, &quot;elf32-littlearm&quot;)</span>
-<span class="code-line">OUTPUT_ARCH(arm)</span>
-<span class="code-line">ENTRY(_start)</span>
-<span class="code-line">SECTIONS</span>
-<span class="code-line">{</span>
-<span class="code-line">    .text      :</span>
-<span class="code-line">    {</span>
-<span class="code-line">        __start = .;</span>
-<span class="code-line">        *(.vectors)</span>
-<span class="code-line">        arch/arm/cpu/armv7/start.o  (.text*)</span>
-<span class="code-line">        *(.text*)</span>
-<span class="code-line">    } &gt;.sram</span>
-</pre></div>
-
-
-<p>上面定义的两个内存段, 分别是sram, sdram. sram是芯片内部的一段存储区, sdram是DDR
-初始化完成后才能使用的地址区域.<br />
-.text段代码将全部放在sram中, 其中arch/arm/cpu/armv7/start.o里的.text段代码放在sram的
-最开始的地方. 那么start.S就是我们要找的东西啦, 打开一看, 果然就是熟悉而又陌生的汇编代码
-映满屏幕, 末要慌张, 听我慢慢分析, 其实很简单.</p>
-<p><strong>顺流而下, 柳暗花明:</strong></p>
-<p>打开start.S文件, 其实里面有很多注释, 已经足够我们去阅读这里的代码, 这里就会有人说了
-"里面的汇编代码我不知道具体的含义啊", 很早之前我也会有这样的问题, 但是我发现, 就算我
-当时能够很深入的探究, 当时算是相当明白的, 但是时间一久, 都会有遗忘, 看的时候还是要
-重新查, 所以我认为, 在没有很必要的时候我是不会区深入查看这些代码的, 能了解大概在做什么
-就好了.<br />
-这里也想赞一下国外码农的工程意识, 代码写的很有条理, 注释也非常详细, 值得我们学习.  </p>
-<p>这里我就列出主要调用流程:  </p>
-<div class="highlight"><pre><span class="code-line"><span class="cm">/* Allow the board to save important registers */</span><span class="w"></span></span>
-<span class="code-line">b<span class="w">   </span>save_boot_params<span class="w">  </span><span class="o">//</span><span class="w"> </span><span class="err">里实际上就是保存一下函数的返回地址</span><span class="w"></span></span>
-<span class="code-line"><span class="w">    </span><span class="o">|-</span><span class="w"> </span>disable<span class="w"> </span>interrupts<span class="w"></span></span>
-<span class="code-line"><span class="w">    </span><span class="o">|-</span><span class="w"> </span>b<span class="w"> </span>cpu_init_cp15<span class="w">  </span><span class="o">---&gt;</span><span class="w"> </span><span class="o">|-</span><span class="w"> </span>Invalidate<span class="w"> </span>L1<span class="w"> </span>I<span class="o">/</span>D<span class="w">  </span><span class="o">//</span><span class="w"> </span><span class="err">无效</span><span class="w"> </span><span class="err">指令</span><span class="o">/</span><span class="err">数据</span><span class="w"> </span><span class="err">缓存</span><span class="w"></span></span>
-<span class="code-line"><span class="w">    </span><span class="o">|</span><span class="w">                        </span><span class="o">|-</span><span class="w"> </span>disable<span class="w"> </span>MMU<span class="w">        </span><span class="o">//</span><span class="w"> </span><span class="err">方便后续的内存访问</span><span class="o">,</span><span class="w"> </span><span class="err">不需要填写</span>TLB<span class="w"></span></span>
-<span class="code-line"><span class="w">    </span><span class="o">|</span><span class="w"></span></span>
-<span class="code-line"><span class="w">    </span><span class="o">|-</span><span class="w"> </span>b<span class="w"> </span>cpu_init_crit<span class="w">  </span><span class="o">---&gt;</span><span class="w"> </span><span class="o">|-</span><span class="w"> </span>b<span class="w"> </span>lowlevel_init<span class="w"> </span><span class="o">--&gt;</span><span class="w"> </span><span class="o">|-</span><span class="w"> </span>Setup<span class="w"> </span>a<span class="w"> </span>temporary<span class="w"> </span>stack<span class="w"> </span><span class="o">//</span><span class="w"> </span><span class="err">设置</span>SP指针<span class="o">,</span><span class="w"> </span><span class="err">估计马上要跑</span>C代码了<span class="w"></span></span>
-<span class="code-line"><span class="w">    </span><span class="o">|</span><span class="w">                                               </span><span class="o">|-</span><span class="w"> </span>b<span class="w"> </span>s_init<span class="w"> </span><span class="o">--&gt;</span><span class="w"> </span><span class="o">|-</span><span class="w"> </span>init_omap_revision<span class="w"> </span><span class="o">//</span><span class="w"> </span><span class="err">获取芯片</span>ID<span class="w"></span></span>
-<span class="code-line"><span class="w">    </span><span class="o">|</span><span class="w">                                                               </span><span class="o">|-</span><span class="w"> </span>watchdog_init<span class="w"> </span><span class="o">//</span><span class="w"> </span><span class="err">初始化看门狗</span><span class="w"></span></span>
-<span class="code-line"><span class="w">    </span><span class="o">|</span><span class="w">                                                               </span><span class="o">|-</span><span class="w"> </span>force_emif_self_refresh<span class="o">()</span><span class="err">;</span><span class="w"> </span><span class="o">//</span><span class="w"> </span><span class="err">初始化</span>DDR<span class="w"></span></span>
-<span class="code-line"><span class="w">    </span><span class="o">|</span><span class="w">                                                               </span><span class="o">|-</span><span class="w"> </span>setup_clocks_for_console<span class="w"> </span><span class="o">//</span><span class="w"> </span><span class="err">开时钟等工作</span><span class="w"></span></span>
-<span class="code-line"><span class="w">    </span><span class="o">|-</span><span class="w"> </span>b<span class="w"> </span>_main<span class="w"> </span><span class="o">--&gt;</span><span class="w"> </span><span class="o">|-</span><span class="w"> </span>setup<span class="w"> </span>SP<span class="w"> </span><span class="o">//</span><span class="w"> </span>Set<span class="w"> </span>up<span class="w"> </span>initial<span class="w"> </span>C<span class="w"> </span>runtime<span class="w"> </span>environment<span class="w"></span></span>
-<span class="code-line"><span class="w">                   </span><span class="o">|-</span><span class="w"> </span>relocate_code<span class="w"> </span><span class="o">//</span><span class="w"> </span><span class="err">代码从定位</span><span class="w"></span></span>
-<span class="code-line"><span class="w">                   </span><span class="o">|-</span><span class="w"> </span>clear<span class="w"> </span>BSS<span class="w"></span></span>
-<span class="code-line"><span class="w">                   </span><span class="o">|-</span><span class="w"> </span>ldr<span class="w"> </span>pc<span class="o">,</span><span class="w"> </span><span class="o">=</span>board_init_r<span class="w"> </span><span class="o">//</span><span class="w"> </span><span class="err">正式进入</span>uboot地界<span class="w"></span></span>
-<span class="code-line"></span>
-<span class="code-line"><span class="err">相关文件地址:</span><span class="w"></span></span>
-<span class="code-line">arch<span class="o">/</span>arm<span class="o">/</span>cpu<span class="o">/</span>armv7<span class="o">/</span>start<span class="o">.</span>S<span class="w"></span></span>
-<span class="code-line">arch<span class="o">/</span>arm<span class="o">/</span>cpu<span class="o">/</span>armv7<span class="o">/</span>lowlevel_init<span class="o">.</span>S<span class="w"></span></span>
-<span class="code-line">arch<span class="o">/</span>arm<span class="o">/</span>cpu<span class="o">/</span>armv7<span class="o">/</span>omap<span class="o">-</span>common<span class="o">/</span>hwinit<span class="o">-</span>common<span class="o">.</span>c<span class="w"></span></span>
-<span class="code-line">arch<span class="o">/</span>arm<span class="o">/</span>lib<span class="o">/</span>crt0<span class="o">.</span>S<span class="w"></span></span>
-<span class="code-line">arch<span class="o">/</span>arm<span class="o">/</span>lib<span class="o">/</span>board<span class="o">.</span>c<span class="w"></span></span>
-</pre></div>
-
-
-<p>上面展示东西不多, 但是包含的东西确是大大滴多啊, 涉及的基础知识很多, 如计算机理论, 编译连接 等, 
-是不是瞬间有了"望尽天涯路"的感觉.</p>
-<blockquote>
-<p>参考资料:<br />
-[1]: <a href="http://www.denx.de/wiki/U-Boot">Universal Boot Loader </a><br />
-[2]: <a href="http://www.ti.com/product/omap4460">TI omap4460</a>  </p>
-</blockquote>
-                <div class="clear"></div>
-
-                <div class="info">
-                    <a href="http://kgat96.github.io/pandaboard-bootload-process.html">posted at 12:00</a>
-                    &nbsp;&middot;&nbsp;<a href="http://kgat96.github.io/category/.html" rel="tag"></a>
-                    &nbsp;&middot;
-                    &nbsp;<a href="http://kgat96.github.io/tag/uboot.html" class="tags">uboot</a>
-                    &nbsp;<a href="http://kgat96.github.io/tag/pandaboard.html" class="tags">pandaboard</a>
-                </div>
-            </article>            <h4 class="date">May 31, 2015</h4>
-
-            <article class="post">
-                <h2 class="title">
-                    <a href="http://kgat96.github.io/debug-for-usb-gadget-ethernet.html" rel="bookmark" title="Permanent Link to &quot;PandaBoard ES USB Gadget Ethernet&quot;">PandaBoard ES USB Gadget Ethernet</a>
-                </h2>
-
-                <blockquote>
-<p><strong>主要内容:</strong>
-当你调试的使用如果有网络,是不是很方便呢!但是你想搭建环境的时候却发现各种麻
+				        </article></li>
+				        <li><article class="hentry">
+				                <header> <h2 class="entry-title"><a href="http://kgat96.github.io/articles/2015/05/31/debug-for-usb-gadget-ethernet/" rel="bookmark" title="Permalink to PandaBoard ES USB Gadget Ethernet">PandaBoard ES USB Gadget Ethernet</a></h2> </header>
+				                <footer class="post-info">
+				                    <!--<abbr class="published" title="2015-05-31T10:00:00+08:00"> Sun 31 May 2015 </abbr>
+<address class="vcard author">By <a class="url fn" href="http://kgat96.github.io/author/kage-shen.html">Kage Shen</a></address>-->
+								 <address class="vcard author" style="font-style:italic;">
+									Sun 31 May 2015
+										&nbsp;&nbsp;Write By <a class="url fn" href="http://kgat96.github.io/author/kage-shen.html">Kage Shen</a>
+								  </address>
+									
+				                </footer><!-- /.post-info -->
+				                <div class="entry-content"> <blockquote>
+<h3>主要内容:</h3>
+<p>当你调试的使用如果有网络,是不是很方便呢!但是你想搭建环境的时候却发现各种麻
 烦,例如需要专门的硬件(路由器),需要一根网线链接，没有路由的话可能要来回插
 拔网线,很是麻烦.大家电脑USB口都很多,那为什么不用USB来的调试板子呢?如果能
 像ADB一样,那多方便啊,但是人家是Android啊,我们在调基本的linux的时候没有ADB
 这样的服务啊,那能不能USB转网口来通信呢?网络一通什么nfs,ssh都能用了, 其他的
 什么的都是浮云了，于是成文共享.</p>
 </blockquote>
-<h1>准备工作</h1>
+<h3>准备工作</h3>
 <p>1，可以正常使用的开发板一个</p>
 <p>2，Linux系统电脑一台</p>
 <p>3，&gt; 2G SD卡一张</p>
 <p>4，搭建编译环境</p>
 <p>根据前面的文章，想必现在板子也是能够启动了，不行的赶紧先看看前面的文章。</p>
-<h1>配置 Kernel 编译选项</h1>
+<h3>配置 Kernel 编译选项</h3>
 <p>其中需要选定的是下面几个选项</p>
-<div class="highlight"><pre><span class="code-line">[*] CONFIG_USB_MUSB_HDRC</span>
-<span class="code-line">[*] MUSB Mode Selection (Dual Role mode)</span>
-<span class="code-line">[*] CONFIG_TWL6030_USB</span>
-<span class="code-line">[*] CONFIG_USB_GADGET</span>
-<span class="code-line">    [*] USB Gadget Drivers (CONFIG_USB_ETH)</span>
-</pre></div>
+<div class="highlight"><pre><span></span><span class="o">[</span>*<span class="o">]</span> CONFIG_USB_MUSB_HDRC
+<span class="o">[</span>*<span class="o">]</span> MUSB Mode Selection <span class="o">(</span>Dual Role mode<span class="o">)</span>
+<span class="o">[</span>*<span class="o">]</span> CONFIG_TWL6030_USB ...</pre></div> </div><!-- /.entry-content -->
+
+								<div class="medium primary btn"><a href="http://kgat96.github.io/articles/2015/05/31/debug-for-usb-gadget-ethernet/" rel="bookmark" title="Permalink to PandaBoard ES USB Gadget Ethernet">Read more <i class="icon-arrow-right"></i></a></div>
 
 
-<p>这里是已经配置好的 <strong><a href="http://7xigc2.com1.z0.glb.clouddn.com/omap2plus_defconfig.txt">config</a></strong>，我的是 linux4.0 版本，不过里面的选项差不多，对比USB部分配置即可。</p>
-<h1>配置网络</h1>
-<p>使用新编译的boot.img镜像来启动开发板，然后用USB线连接到电脑上（板子的OTG口接到电脑的USB口上），此时电脑会出现一个usb网卡：</p>
-<div class="highlight"><pre><span class="code-line"><span class="n">enp0s20u9i1</span><span class="o">:</span> <span class="n">flags</span><span class="o">=</span><span class="mi">4163</span><span class="o">&lt;</span><span class="n">UP</span><span class="o">,</span><span class="n">BROADCAST</span><span class="o">,</span><span class="n">RUNNING</span><span class="o">,</span><span class="n">MULTICAST</span><span class="o">&gt;</span>  <span class="n">mtu</span> <span class="mi">1500</span></span>
-<span class="code-line">        <span class="n">ether</span> <span class="n">ba</span><span class="o">:</span><span class="mi">2</span><span class="n">c</span><span class="o">:</span><span class="mi">17</span><span class="o">:</span><span class="n">c4</span><span class="o">:</span><span class="mi">83</span><span class="o">:</span><span class="n">aa</span>  <span class="n">txqueuelen</span> <span class="mi">1000</span>  <span class="o">(</span><span class="n">Ethernet</span><span class="o">)</span></span>
-<span class="code-line">        <span class="n">RX</span> <span class="n">packets</span> <span class="mi">0</span>  <span class="n">bytes</span> <span class="mi">0</span> <span class="o">(</span><span class="mf">0.0</span> <span class="n">B</span><span class="o">)</span></span>
-<span class="code-line">        <span class="n">RX</span> <span class="n">errors</span> <span class="mi">0</span>  <span class="n">dropped</span> <span class="mi">0</span>  <span class="n">overruns</span> <span class="mi">0</span>  <span class="n">frame</span> <span class="mi">0</span></span>
-<span class="code-line">        <span class="n">TX</span> <span class="n">packets</span> <span class="mi">8</span>  <span class="n">bytes</span> <span class="mi">1184</span> <span class="o">(</span><span class="mf">1.1</span> <span class="n">KiB</span><span class="o">)</span></span>
-<span class="code-line">        <span class="n">TX</span> <span class="n">errors</span> <span class="mi">0</span>  <span class="n">dropped</span> <span class="mi">0</span> <span class="n">overruns</span> <span class="mi">0</span>  <span class="n">carrier</span> <span class="mi">0</span>  <span class="n">collisions</span> <span class="mi">0</span></span>
-</pre></div>
+
+								<div class="row tag-row">
+										<span>Tagged as : </span>
+											<a class="danger label" href="http://kgat96.github.io/tag/pandaboard.html">Pandaboard</a>
+								</div>
 
 
-<p>系统识别信息</p>
-<div class="highlight"><pre><span class="code-line">[ 2304.806598] usbcore: registered new interface driver cdc_subset</span>
-<span class="code-line">[ 2304.806601] cdc_ether: probe of 3-9:1.0 failed with error -16</span>
-<span class="code-line">[ 2304.806616] usbcore: registered new interface driver cdc_ether</span>
-<span class="code-line">[ 2304.807396] cdc_subset 3-9:1.1 enp0s20u9i1: renamed from usb0</span>
-</pre></div>
 
-
-<p>如果电脑上没有上面的信息，请确认你编译的Kernel的正确性。
-首先设置开发板的IP地址以及网关：</p>
-<div class="highlight"><pre><span class="code-line">ifconfig usb0 192.168.0.200 netmask 255.255.255.0 up</span>
-<span class="code-line">route add default gw 192.168.0.201</span>
-</pre></div>
-
-
-<p>设置电脑上的网络配置：</p>
-<div class="highlight"><pre><span class="code-line">ifconfig enp0s20u13i1 192.168.0.201 netmask 255.255.255.0 up</span>
-</pre></div>
-
-
-<p>现在就可以ping一下开发板了：</p>
-<div class="highlight"><pre><span class="code-line">ping 192.168.0.200</span>
-</pre></div>
-
-
-<p>如果你想板子通过电脑的网络来访问外网，那么你可以这样：</p>
-<div class="highlight"><pre><span class="code-line">iptables -A POSTROUTING -t nat -j MASQUERADE -s 192.168.0.0/24</span>
-<span class="code-line">sysctl -w net.ipv4.ip_forward=1</span>
-</pre></div>
-
-
-<p>现在你就可以在板子上访问外网了，好玩吧！</p>
-<blockquote>
-<p>参考资料:
-[1]: <a href="http://wiki.openmoko.org/wiki/USB_Networking">Openmoko Networking Setup USB Networking</a></p>
+				        </article></li>
+				        <li><article class="hentry">
+				                <header> <h2 class="entry-title"><a href="http://kgat96.github.io/articles/2015/05/01/build-new-kernel-on-pandaboard/" rel="bookmark" title="Permalink to PandaBoard ES 下 Kernel 4.0.0 的移植">PandaBoard ES 下 Kernel 4.0.0 的移植</a></h2> </header>
+				                <footer class="post-info">
+				                    <!--<abbr class="published" title="2015-05-01T10:00:00+08:00"> Fri 01 May 2015 </abbr>
+<address class="vcard author">By <a class="url fn" href="http://kgat96.github.io/author/kage-shen.html">Kage Shen</a></address>-->
+								 <address class="vcard author" style="font-style:italic;">
+									Fri 01 May 2015
+										&nbsp;&nbsp;Write By <a class="url fn" href="http://kgat96.github.io/author/kage-shen.html">Kage Shen</a>
+								  </address>
+									
+				                </footer><!-- /.post-info -->
+				                <div class="entry-content"> <blockquote>
+<h3>主要内容:</h3>
+<p>实际上 <strong>Kernel 4.0.0</strong> 已经支持 <a href="http://pandaboard.org">PandaBoard</a> 的，应该是 <strong>Kernel</strong> 主分支都是支持这块板子的，只是在实际让最新 Kernel 跑起来的过程中还是有一些问题的，所以本文就是告诉你一步步让它跑起来的。
+</p>
 </blockquote>
-                <div class="clear"></div>
-
-                <div class="info">
-                    <a href="http://kgat96.github.io/debug-for-usb-gadget-ethernet.html">posted at 10:00</a>
-                    &nbsp;&middot;&nbsp;<a href="http://kgat96.github.io/category/.html" rel="tag"></a>
-                    &nbsp;&middot;
-                    &nbsp;<a href="http://kgat96.github.io/tag/pandaboard.html" class="tags selected">Pandaboard</a>
-                </div>
-            </article>            <h4 class="date">May 01, 2015</h4>
-
-            <article class="post">
-                <h2 class="title">
-                    <a href="http://kgat96.github.io/build-new-kernel-on-pandaboard.html" rel="bookmark" title="Permanent Link to &quot;PandaBoard ES 下 Kernel 4.0.0 的移植&quot;">PandaBoard ES 下 Kernel 4.0.0 的移植</a>
-                </h2>
-
-                <blockquote>
-<p><strong>主要内容:</strong>
-实际上 <strong>Kernel 4.0.0</strong> 已经支持 <a href="http://pandaboard.org">PandaBoard</a> 的，应该是 <strong>Kernel</strong> 主分支都是支持这块板子的，只是在实际让最新 Kernel 跑起来的过程中还是有一些问题的，所以本文就是告诉你一步步让它跑起来的。</p>
-</blockquote>
-<h1>准备工作</h1>
+<h3>准备工作</h3>
 <p>1，可以正常使用的开发板一个</p>
 <p>2，Linux系统电脑一台</p>
 <p>3，&gt; 2G SD卡一张</p>
@@ -256,149 +167,135 @@ u-boot.img大家都知道, MLO是啥呢? 明显这个是omap4460启动时需要�
 <ul>
 <li><strong>下载 arm-gcc 编译器</strong></li>
 </ul>
-<div class="highlight"><pre><span class="code-line">arm-2014.05-29-arm-none-linux-gnueabi-i686-pc-linux-gnu.tar.bz2</span>
-<span class="code-line">#arm-none-linux-gnueabi-gcc -v</span>
-<span class="code-line">gcc version 4.8.3 20140320 (prerelease) (Sourcery CodeBench Lite 2014.05-29)</span>
+<div class="highlight"><pre><span></span>arm-2014.05-29-arm-none-linux-gnueabi-i686-pc-linux-gnu.tar.bz2
+<span class="c1">#arm-none-linux-gnueabi-gcc -v</span>
+gcc version 4.8.3 <span class="m">20140320</span> <span class="o">(</span>prerelease<span class="o">)</span> <span class="o">(</span>Sourcery CodeBench Lite 2014.05-29<span class="o">)</span>
 </pre></div>
 
 
 <ul>
-<li><strong>同步库 linux-omap (Kernel)</strong></li>
-</ul>
-<div class="highlight"><pre><span class="code-line">#git clone git://git.kernel.org/pub/scm/linux/kernel/git/tmlind/linux-omap.git</span>
-</pre></div>
+<li><strong>同步库 linux-omap (Kernel ...</strong></li></ul> </div><!-- /.entry-content -->
+
+								<div class="medium primary btn"><a href="http://kgat96.github.io/articles/2015/05/01/build-new-kernel-on-pandaboard/" rel="bookmark" title="Permalink to PandaBoard ES 下 Kernel 4.0.0 的移植">Read more <i class="icon-arrow-right"></i></a></div>
 
 
-<ul>
-<li><strong>同步库 uboot (bootloader)</strong></li>
-</ul>
-<blockquote>
-<p>原生库在  <a href="http://www.denx.de">www.denx.de</a> 非常慢</p>
-</blockquote>
-<div class="highlight"><pre><span class="code-line">#git clone https://github.com/RobertCNelson/u-boot.git</span>
-</pre></div>
+
+								<div class="row tag-row">
+										<span>Tagged as : </span>
+											<a class="danger label" href="http://kgat96.github.io/tag/pandaboard.html">Pandaboard</a>
+								</div>
 
 
-<ul>
-<li><strong>下载根文件系统 (ubuntu-14.04.2)</strong></li>
-</ul>
-<div class="highlight"><pre><span class="code-line">wget -c https://rcn-ee.com/rootfs/eewiki/minfs/ubuntu-14.04.2-minimal-armhf-2015-04-27.tar.xz</span>
-</pre></div>
+
+				        </article></li>
+				</ol><!-- /#posts-list -->
+
+        </div><!-- /.eleven.columns -->
+        
+<div class="three columns">
+
+<div class="sidebarbg">
+	<h4>Pages</h4>
+	<ul>
+		  <li><a href="/functions/tags.html">Tags</a></li>
+		  <li><a href="/functions/archives.html">Archives</a></li>
+	</ul>
+</div>
 
 
-<h1>让它板子飞起来</h1>
-<p><strong>1，格式化&amp;制作启动分区</strong></p>
-<div class="highlight"><pre><span class="code-line">#fdisk -l</span>
-<span class="code-line">Disk /dev/sdc: 1.9 GiB, 2014838784 bytes, 3935232 sectors</span>
-<span class="code-line">Units: sectors of 1 * 512 = 512 bytes</span>
-<span class="code-line">Sector size (logical/physical): 512 bytes / 512 bytes</span>
-<span class="code-line">I/O size (minimum/optimal): 512 bytes / 512 bytes</span>
-<span class="code-line">Disklabel type: dos</span>
-<span class="code-line">Disk identifier: 0xfb04e098</span>
-<span class="code-line"></span>
-<span class="code-line">Device     Boot  Start     End Sectors  Size Id Type</span>
-<span class="code-line">/dev/sdc1  *      2048  264191  262144  128M  c W95 FAT32 (LBA)</span>
-<span class="code-line">/dev/sdc2       264192 3935231 3671040  1.8G 83 Linux</span>
-</pre></div>
 
 
-<p><strong><em>这里有两点要注意：</em></strong></p>
-<ul>
-<li>第一个分区一定是 W95 FAT32 (LBA) 格式</li>
-<li>第一个分区一定是可以引导的，既有 Boot *</li>
-</ul>
-<p><strong>2，编译 Uboot</strong></p>
-<p>最新的Uboot整的和Kernel的一样的图形化的配置界面了，略屌.</p>
-<p><img alt="uboot menuconfig" src="http://7xigc2.com1.z0.glb.clouddn.com/build-new-kernel-on-pandaboard-p1.png" /></p>
-<p>那么编译自然也和Kernel一样啦，这里先不对Uboot做修改，免得大家看不懂哈</p>
-<div class="highlight"><pre><span class="code-line">#export ARCH=arm</span>
-<span class="code-line">#export CROSS_COMPILE=arm-none-linux-gnueabi-</span>
-<span class="code-line">#make omap4_panda_defconfig</span>
-<span class="code-line">#make -j8</span>
-<span class="code-line">  ...</span>
-<span class="code-line">  OBJCOPY u-boot.bin</span>
-<span class="code-line">  MKIMAGE u-boot.img</span>
-<span class="code-line">  OBJCOPY u-boot.srec</span>
-<span class="code-line">  CC      spl/common/spl/spl.o</span>
-<span class="code-line">  LD      spl/common/spl/built-in.o</span>
-<span class="code-line">  CC      spl/lib/display_options.o</span>
-<span class="code-line">  LD      spl/lib/built-in.o</span>
-<span class="code-line">  LD      spl/u-boot-spl</span>
-<span class="code-line">  OBJCOPY spl/u-boot-spl.bin</span>
-<span class="code-line">  MKIMAGE MLO</span>
-</pre></div>
+<div class="social sidebarbg">
+	<nav class="widget">
+	  <h4>Social</h4>
+	  <ul>
+		<li><a target="_blank" href="https://github.com/">GitHub</a></li>
+		<li><a target="_blank" href="https://www.facebook.com/">FaceBook</a></li>
+	  </ul>
+	</nav>
+</div>
+
+<nav class="widget sidebarbg">
+  <h4>Links</h4>
+  <ul>
+	<li><a target="_blank" href="http://getpelican.com/">Pelican</a></li>
+	<li><a target="_blank" href="http://python.org/">Python.org</a></li>
+	<li><a target="_blank" href="http://jinja.pocoo.org/">Jinja2</a></li>
+  </ul>
+</nav>
+
+</div> </div><!-- /.row -->
+
+<p class="paginator">
+    Page 1 / 1
+</p>
+</section><!-- /#content -->
+
+       </div><!-- /.row -->
+    </div><!-- /.container -->
 
 
-<p>这里生成了几个比较重要的文件  <strong>MLO、u-boot.img</strong></p>
-<ul>
-<li><strong>MLO：</strong> TI x-loader 第二引导阶段的执行文件，omap启动的时候会读取这个文件，并load进内存</li>
-<li><strong>u-boot.img：</strong> 这个不解释了</li>
-</ul>
-<p><strong>2，编译 Kernel</strong></p>
-<p>编译之前我们需要做件事情，开启启动时候的打印 (<strong>EARLY_PRINTK</strong>)</p>
-<div class="highlight"><pre><span class="code-line">patch to omap2plus_defconfig:</span>
-<span class="code-line">+CONFIG_DEBUG_LL=y</span>
-<span class="code-line">+CONFIG_DEBUG_OMAP4UART3=y</span>
-<span class="code-line">+CONFIG_DEBUG_OMAP2PLUS_UART=y</span>
-<span class="code-line">+CONFIG_DEBUG_LL_INCLUDE=&quot;debug/omap2plus.S&quot;</span>
-<span class="code-line">+CONFIG_EARLY_PRINTK=y</span>
-</pre></div>
+       <div class="container.nopad bg">
+
+    
+        <footer id="credits" class="row">
+          <div class="seven columns left-center">
+
+                   <address id="about" class="vcard body">
+                    Proudly powered by <a href="http://getpelican.com/">Pelican</a>,
+                    which takes great advantage of <a href="http://python.org">Python</a>.
+                    <br />
+                    Based on the <a target="_blank" href="http://gumbyframework.com">Gumby Framework</a>
+                    </address>
+          </div>
 
 
-<div class="highlight"><pre><span class="code-line">export ARCH=arm</span>
-<span class="code-line">export CROSS_COMPILE=arm-none-linux-gnueabi-</span>
-<span class="code-line">make omap2plus_defconfig</span>
-<span class="code-line">make zImage -j8  // 这里就使用zImage就可以了</span>
-<span class="code-line">make dtbs</span>
-<span class="code-line">cat arch/arm/boot/zImage arch/arm/boot/dts/omap4-panda-es.dtb &gt; /tmp/appended</span>
-<span class="code-line">mkimage -A arm -O linux -T kernel -C none -a 0x80008000 -e 0x80008000 \</span>
-<span class="code-line">         -n &quot;Linux&quot; -d /tmp/appended /tmp/uImage</span>
-</pre></div>
+          <div class="seven columns">
+            <div class="row">
+              <ul class="socbtns">
+
+                <li><div class="btn primary"><a href="https://github.com/" target="_blank">Github</a></div></li>
 
 
-<p>这里最后生成了uImage，那为什么不用 <strong>make uImage</strong> 来一步生成呢，当然你可以先测试一下看看。
-实际上从 linux 3.10 后，代码库就开始使用 dtbs 文件来描述板机配置，问什么，大家自己了解吧。</p>
-<p><strong>3，制作启动SD卡</strong></p>
-<p>拷贝刚才生成的 <strong>uImage MLO u-boot.img</strong> 到第一个分区，将下载的 <strong>ubuntu-14.04.2-minimal-armhf-2015-04-27.tar.xz</strong> 解压到第二个分区。</p>
-<p>好了终于可以看到他启动了 : )</p>
-<p><img alt="boot log" src="http://7xigc2.com1.z0.glb.clouddn.com/build-new-kernel-on-pandaboard-p2.png" /></p>
-<blockquote>
-<p><strong>Note:</strong>
-这里 omap4-panda-es.dtb 就是板级配置文件了，上面是将他和 zImage 和到了一起，实际上还有一种
-更加灵活的方法，就是动态加载 dtb 文件，并加载相同的 zImage，下面提供 Uboot 动态加载命令：</p>
-</blockquote>
-<div class="highlight"><pre><span class="code-line">&gt; Panda # load mmc 0 zImage 0x81000000</span>
-<span class="code-line">&gt; Panda # load mmc 0 omap4-panda-es.dtb x81f00000</span>
-<span class="code-line">&gt; Panda # bootz 0x81000000 - 0x81f00000</span>
-</pre></div>
-                <div class="clear"></div>
+                <li><div class="btn facebook"><a href="https://www.facebook.com/" target="_blank">Facebook</a></div></li>
 
-                <div class="info">
-                    <a href="http://kgat96.github.io/build-new-kernel-on-pandaboard.html">posted at 10:00</a>
-                    &nbsp;&middot;&nbsp;<a href="http://kgat96.github.io/category/.html" rel="tag"></a>
-                    &nbsp;&middot;
-                    &nbsp;<a href="http://kgat96.github.io/tag/pandaboard.html" class="tags selected">Pandaboard</a>
-                </div>
-            </article>
 
-            <div class="clear"></div>
-            <footer>
-                <p>
-                <a href="https://github.com/jody-frankowski/blue-penguin">Blue Penguin</a> Theme
-                &middot;
-                Powered by <a href="http://getpelican.com">Pelican</a>
-            </footer>
-        </div>
-        <div class="clear"></div>
+              </ul>
+            </div>
+          </div>
+        </footer>
+
     </div>
-    <script type="text/javascript">
-    var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
-    document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
-    </script>
-    <script type="text/javascript">
-    try {
-        var pageTracker = _gat._getTracker("UA-60962023-1");
-    pageTracker._trackPageview();
-    } catch(err) {}</script>
+
+
+<script type="text/javascript">
+    var disqus_shortname = 'kgat96';
+    (function () {
+        var s = document.createElement('script'); s.async = true;
+        s.type = 'text/javascript';
+        s.src = 'http://' + disqus_shortname + '.disqus.com/count.js';
+        (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+    }());
+</script>
+  <script src="http://kgat96.github.io/theme/js/libs/jquery-1.9.1.min.js"></script>
+  <script src="http://kgat96.github.io/theme/js/libs/gumby.min.js"></script>
+  <script src="http://kgat96.github.io/theme/js/plugins.js"></script>
+	<script>
+	(function() {
+		var $backToTopTxt = "返回顶部", $backToTopEle = $('<div class="backToTop"></div>').appendTo($("body"))
+			.text($backToTopTxt).attr("title", $backToTopTxt).click(function() {
+				$("html, body").animate({ scrollTop: 0 }, 120);
+		}), $backToTopFun = function() {
+			var st = $(document).scrollTop(), winh = $(window).height();
+			(st > 0)? $backToTopEle.show(): $backToTopEle.hide();
+			//IE6下的定位
+			if (!window.XMLHttpRequest) {
+				$backToTopEle.css("top", st + winh - 166);
+			}
+		};
+		$(window).bind("scroll", $backToTopFun);
+		$(function() { $backToTopFun(); });
+	})();
+	</script>
 </body>
 </html>

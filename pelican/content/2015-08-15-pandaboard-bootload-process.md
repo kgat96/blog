@@ -1,24 +1,20 @@
 Title: Pandaboard bootload(uboot) 启动流程探究
 Date: 2015-08-15 12:00
-Category:
 Tags: uboot, pandaboard
 Slug: pandaboard-bootload-process
 Author: Kage Shen
-Summary:
 
-> **主要内容:**  
+> ###主要内容:  
 > 之前使用的uboot都是直接编译就可以使用了, 但是作为一个愿意折腾的人, 这样的程度显然不够,  
 > 于是一如既往的打开了uboot的代码看起来吧!  
 
-准备工作
-=======
+###准备工作
 
 1, Linux 64bit 系统电脑一台  
 2, 熟悉的编译器, 最好有代码引索功能的, 免得grep蛋疼  
 3, 下载源代码, 及芯片手册  
 
-引导流程从这里开始
-====
+###引导流程从这里开始
 
 **寻找srart源头:**
 
@@ -28,7 +24,7 @@ u-boot.img大家都知道, MLO是啥呢? 明显这个是omap4460启动时需要�
 加载的二进制文件(关于omap4460的自启动过程可以参看手册 <27.1 Initialization Overview>),
 那么启动的汇编代码应该就在MLO里了吧, 打开uboot代码的 Makefile (./Makefile), 发现  
 
-```
+```bash
 ./Makefile:1222
 spl/u-boot-spl: tools prepare
 	$(Q)$(MAKE) obj=spl -f $(srctree)/scripts/Makefile.spl all
@@ -36,7 +32,7 @@ spl/u-boot-spl: tools prepare
 
 spl在uboot里表示第二阶段启动代码, 其实就是芯片内部代码启动完后, 就会加载spl了,
 那估计就是我们说的MLO了, 继续看, MLO必然和 scripts/Makefile.spl 文件有关, 查看之  
-```
+```bash
 scripts/Makefile.spl:54
 libs-$(CONFIG_SPL_FRAMEWORK) += common/spl/
 libs-$(CONFIG_SPL_LIBCOMMON_SUPPORT) += common/
@@ -45,7 +41,7 @@ libs-$(CONFIG_SPL_LIBDISK_SUPPORT) += disk/
 这里只发现编译选项和编译内容, 貌似没什么线索了, 换一个想法, 编译的时候没看到, 是不是
 在连接的时候能够看到点什么呢, 于是飞快敲入:  
 
-```
+```bash
 $make V=1
    ....
    arm-none-linux-gnueabi-ld     -r -o spl/lib/built-in.o spl/lib/hashtable.o spl/lib/errno.o spl/lib/display_options.o spl/lib/crc32.o spl/lib/ctype.o spl/lib/div64.o spl/lib/hang.o spl/lib/linux_compat.o spl/lib/linux_string.o spl/lib/string.o spl/lib/time.o spl/lib/uuid.o spl/lib/vsprintf.o 
@@ -56,7 +52,7 @@ $make V=1
 cd spl && arm-none-linux-gnueabi-ld 连接是用的u-boot-spl.lds这个文件, 去看看:  
 (u-boot-spl.lds文件在uboot里有很多, 怎么判断? 在Makefile里找答案)
 
-```
+```bash
 arch/arm/cpu/armv7/omap-common/u-boot-spl.lds:0
 MEMORY { .sram : ORIGIN = CONFIG_SPL_TEXT_BASE,\
 		LENGTH = CONFIG_SPL_MAX_SIZE }
@@ -94,7 +90,7 @@ SECTIONS
 
 这里我就列出主要调用流程:  
 
-```
+<pre class="prettyprint">
 /* Allow the board to save important registers */
 b	save_boot_params  // 里实际上就是保存一下函数的返回地址
 	|- disable interrupts
@@ -117,7 +113,7 @@ arch/arm/cpu/armv7/lowlevel_init.S
 arch/arm/cpu/armv7/omap-common/hwinit-common.c
 arch/arm/lib/crt0.S
 arch/arm/lib/board.c
-```
+</pre>
 
 上面展示东西不多, 但是包含的东西确是大大滴多啊, 涉及的基础知识很多, 如计算机理论, 编译连接 等, 
 是不是瞬间有了"望尽天涯路"的感觉.

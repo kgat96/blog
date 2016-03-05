@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+        <title>Kage's Blog</title>
+        <meta charset="utf-8" />
+        <link href="http://kgat96.github.io/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="Kage's Blog Full Atom Feed" />
+
+
+        <!-- Mobile viewport optimized: j.mp/bplateviewport -->
+        <meta name="viewport" content="width=device-width,initial-scale=1, maximum-scale=1">
+
+        <link rel="stylesheet" type="text/css" href="http://kgat96.github.io/theme/gumby.css" />
+        <link rel="stylesheet" type="text/css" href="http://kgat96.github.io/theme/style.css" />
+        <link rel="stylesheet" type="text/css" href="http://kgat96.github.io/theme/pygment.css" />
+
+        <script src="http://kgat96.github.io/theme/js/libs/modernizr-2.6.2.min.js"></script>
+
+<script src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js"></script>
+
+
+</head>
+
+<body id="index" class="home">
+
+
+    <div class="container">
+
+        <div class="row">
+
+          <header id="banner" class="body">
+                  <h1><a href="http://kgat96.github.io">Kage's Blog <strong>Stay Hungry, Stay Foolish.</strong></a></h1>
+          </header><!-- /#banner -->
+
+            <div id="navigation" class="navbar row">
+              <a href="#" gumby-trigger="#navigation &gt; ul" class="toggle"><i class="icon-menu"></i></a>
+             
+              <ul class="columns">
+                <li><a href="/">Home</a></li>
+
+				<li><a href="/functions/archives.html">Archives</a></li>
+				<!--
+					<li><a href="/functions/tags.html">Tags</a></li>
+					<li><a href="/functions/archives.html">Archives</a></li>
+				
+				-->
+              </ul>
+            </div>
+
+<section id="content">
+
+   <div class="row">
+
+        <div class="eleven columns">
+<h2>Articles in the misc category</h2>
+		
+		         <ol id="post-list">
+				        <li><article class="hentry">
+				                <header> <h2 class="entry-title"><a href="http://kgat96.github.io/articles/2015/08/15/pandaboard-bootload-process/" rel="bookmark" title="Permalink to Pandaboard bootload(uboot) 启动流程探究">Pandaboard bootload(uboot) 启动流程探究</a></h2> </header>
+				                <footer class="post-info">
+				                    <!--<abbr class="published" title="2015-08-15T12:00:00+08:00"> Sat 15 August 2015 </abbr>
+<address class="vcard author">By <a class="url fn" href="http://kgat96.github.io/author/kage-shen.html">Kage Shen</a></address>-->
+								 <address class="vcard author" style="font-style:italic;">
+									Sat 15 August 2015
+										&nbsp;&nbsp;Write By <a class="url fn" href="http://kgat96.github.io/author/kage-shen.html">Kage Shen</a>
+								  </address>
+									
+				                </footer><!-- /.post-info -->
+				                <div class="entry-content"> <blockquote>
+<h3>主要内容:</h3>
+<p>之前使用的uboot都是直接编译就可以使用了, 但是作为一个愿意折腾的人, 这样的程度显然不够,<br />
+于是一如既往的打开了uboot的代码看起来吧!  </p>
+</blockquote>
+<h3>准备工作</h3>
+<p>1, Linux 64bit 系统电脑一台<br />
+2, 熟悉的编译器, 最好有代码引索功能的, 免得grep蛋疼<br />
+3, 下载源代码, 及芯片手册  </p>
+<h3>引导流程从这里开始</h3>
+<p><strong>寻找srart源头:</strong></p>
+<p>折腾过ARM的人必然知道, 系统启动前一定有一段汇编代码, 来设置时钟, 看门狗什么的.
+通过前面的文章, 我们了解uboot编译后生成了两个东西是我们需要的, MLO和u-boot.img,
+u-boot.img大家都知道, MLO是啥呢? 明显这个是omap4460启动时需要的, 而且是会自动
+加载的二进制文件(关于omap4460的自启动过程可以参看手册 &lt;27.1 Initialization Overview&gt;),
+那么启动的汇编代码应该就在MLO里了吧, 打开uboot代码的 Makefile (./Makefile), 发现  </p>
+<div class="highlight"><pre><span></span>./Makefile:1222
+spl/u-boot-spl: tools prepare
+    <span class="k">$(</span>Q ...</pre></div> </div><!-- /.entry-content -->
+
+								<div class="medium primary btn"><a href="http://kgat96.github.io/articles/2015/08/15/pandaboard-bootload-process/" rel="bookmark" title="Permalink to Pandaboard bootload(uboot) 启动流程探究">Read more <i class="icon-arrow-right"></i></a></div>
+
+
+
+								<div class="row tag-row">
+										<span>Tagged as : </span>
+											<a class="danger label" href="http://kgat96.github.io/tag/uboot.html">uboot</a>
+											<a class="danger label" href="http://kgat96.github.io/tag/pandaboard.html">pandaboard</a>
+								</div>
+
+
+
+				        </article></li>
+				        <li><article class="hentry">
+				                <header> <h2 class="entry-title"><a href="http://kgat96.github.io/articles/2015/08/08/archlinux-setup-quartus-15/" rel="bookmark" title="Permalink to Archlinux Setup Quartus II 15.0">Archlinux Setup Quartus II 15.0</a></h2> </header>
+				                <footer class="post-info">
+				                    <!--<abbr class="published" title="2015-08-08T10:00:00+08:00"> Sat 08 August 2015 </abbr>
+<address class="vcard author">By <a class="url fn" href="http://kgat96.github.io/author/kage-shen.html">Kage Shen</a></address>-->
+								 <address class="vcard author" style="font-style:italic;">
+									Sat 08 August 2015
+										&nbsp;&nbsp;Write By <a class="url fn" href="http://kgat96.github.io/author/kage-shen.html">Kage Shen</a>
+								  </address>
+									
+				                </footer><!-- /.post-info -->
+				                <div class="entry-content"> <blockquote>
+<h3>主要内容:</h3>
+<p>因为工作需要使用到 Quartus II, 于是乎就整了个XP电脑, 装了软件, 只是用习惯了Linux<br />
+突然又要我用XP, 只能是让我无力吐槽啊, 发现Quartus有linux版本的, 果断安装之, 装完<br />
+后面x解的事情就交给你们自己了, 我就不说了 ...  </p>
+</blockquote>
+<h3>准备工作</h3>
+<p>1, Linux 64bit 系统电脑一台</p>
+<h3>下载 Quartus II 15.0 软件</h3>
+<p>送上<a href="http://download.altera.com/akdlm/software/acdsinst/15.0/145/ib_installers/QuartusSetup-15.0.0.145-linux.run">下载地址</a>, 请叫我雷锋!<br />
+这个版本是自带 Cyclone IV 库的 (安装的时候可以选择安装)</p>
+<h3>安装配置</h3>
+<p>1, 加上执行权限把</p>
+<div class="highlight"><pre><span></span><span class="c1">#chmod +x QuartusSetup-15.0.0.145-linux.run</span>
+</pre></div>
+
+
+<p>2, 安装</p>
+<p>这里你就直接运行它就可以了, 中间需要你选择安装路径什么的, 相信你都会吧 :)</p>
+<p>安装好后 就可以直接运行了 ...</p> </div><!-- /.entry-content -->
+
+								<div class="medium primary btn"><a href="http://kgat96.github.io/articles/2015/08/08/archlinux-setup-quartus-15/" rel="bookmark" title="Permalink to Archlinux Setup Quartus II 15.0">Read more <i class="icon-arrow-right"></i></a></div>
+
+
+
+								<div class="row tag-row">
+										<span>Tagged as : </span>
+											<a class="danger label" href="http://kgat96.github.io/tag/fpga.html">fpga</a>
+											<a class="danger label" href="http://kgat96.github.io/tag/linux.html">linux</a>
+											<a class="danger label" href="http://kgat96.github.io/tag/quartus.html">quartus</a>
+								</div>
+
+
+
+				        </article></li>
+				        <li><article class="hentry">
+				                <header> <h2 class="entry-title"><a href="http://kgat96.github.io/articles/2015/05/31/debug-for-usb-gadget-ethernet/" rel="bookmark" title="Permalink to PandaBoard ES USB Gadget Ethernet">PandaBoard ES USB Gadget Ethernet</a></h2> </header>
+				                <footer class="post-info">
+				                    <!--<abbr class="published" title="2015-05-31T10:00:00+08:00"> Sun 31 May 2015 </abbr>
+<address class="vcard author">By <a class="url fn" href="http://kgat96.github.io/author/kage-shen.html">Kage Shen</a></address>-->
+								 <address class="vcard author" style="font-style:italic;">
+									Sun 31 May 2015
+										&nbsp;&nbsp;Write By <a class="url fn" href="http://kgat96.github.io/author/kage-shen.html">Kage Shen</a>
+								  </address>
+									
+				                </footer><!-- /.post-info -->
+				                <div class="entry-content"> <blockquote>
+<h3>主要内容:</h3>
+<p>当你调试的使用如果有网络,是不是很方便呢!但是你想搭建环境的时候却发现各种麻
+烦,例如需要专门的硬件(路由器),需要一根网线链接，没有路由的话可能要来回插
+拔网线,很是麻烦.大家电脑USB口都很多,那为什么不用USB来的调试板子呢?如果能
+像ADB一样,那多方便啊,但是人家是Android啊,我们在调基本的linux的时候没有ADB
+这样的服务啊,那能不能USB转网口来通信呢?网络一通什么nfs,ssh都能用了, 其他的
+什么的都是浮云了，于是成文共享.</p>
+</blockquote>
+<h3>准备工作</h3>
+<p>1，可以正常使用的开发板一个</p>
+<p>2，Linux系统电脑一台</p>
+<p>3，&gt; 2G SD卡一张</p>
+<p>4，搭建编译环境</p>
+<p>根据前面的文章，想必现在板子也是能够启动了，不行的赶紧先看看前面的文章。</p>
+<h3>配置 Kernel 编译选项</h3>
+<p>其中需要选定的是下面几个选项</p>
+<div class="highlight"><pre><span></span><span class="o">[</span>*<span class="o">]</span> CONFIG_USB_MUSB_HDRC
+<span class="o">[</span>*<span class="o">]</span> MUSB Mode Selection <span class="o">(</span>Dual Role mode<span class="o">)</span>
+<span class="o">[</span>*<span class="o">]</span> CONFIG_TWL6030_USB ...</pre></div> </div><!-- /.entry-content -->
+
+								<div class="medium primary btn"><a href="http://kgat96.github.io/articles/2015/05/31/debug-for-usb-gadget-ethernet/" rel="bookmark" title="Permalink to PandaBoard ES USB Gadget Ethernet">Read more <i class="icon-arrow-right"></i></a></div>
+
+
+
+								<div class="row tag-row">
+										<span>Tagged as : </span>
+											<a class="danger label" href="http://kgat96.github.io/tag/pandaboard.html">Pandaboard</a>
+								</div>
+
+
+
+				        </article></li>
+				        <li><article class="hentry">
+				                <header> <h2 class="entry-title"><a href="http://kgat96.github.io/articles/2015/05/01/build-new-kernel-on-pandaboard/" rel="bookmark" title="Permalink to PandaBoard ES 下 Kernel 4.0.0 的移植">PandaBoard ES 下 Kernel 4.0.0 的移植</a></h2> </header>
+				                <footer class="post-info">
+				                    <!--<abbr class="published" title="2015-05-01T10:00:00+08:00"> Fri 01 May 2015 </abbr>
+<address class="vcard author">By <a class="url fn" href="http://kgat96.github.io/author/kage-shen.html">Kage Shen</a></address>-->
+								 <address class="vcard author" style="font-style:italic;">
+									Fri 01 May 2015
+										&nbsp;&nbsp;Write By <a class="url fn" href="http://kgat96.github.io/author/kage-shen.html">Kage Shen</a>
+								  </address>
+									
+				                </footer><!-- /.post-info -->
+				                <div class="entry-content"> <blockquote>
+<h3>主要内容:</h3>
+<p>实际上 <strong>Kernel 4.0.0</strong> 已经支持 <a href="http://pandaboard.org">PandaBoard</a> 的，应该是 <strong>Kernel</strong> 主分支都是支持这块板子的，只是在实际让最新 Kernel 跑起来的过程中还是有一些问题的，所以本文就是告诉你一步步让它跑起来的。
+</p>
+</blockquote>
+<h3>准备工作</h3>
+<p>1，可以正常使用的开发板一个</p>
+<p>2，Linux系统电脑一台</p>
+<p>3，&gt; 2G SD卡一张</p>
+<p>4，搭建编译环境</p>
+<ul>
+<li><strong>下载 arm-gcc 编译器</strong></li>
+</ul>
+<div class="highlight"><pre><span></span>arm-2014.05-29-arm-none-linux-gnueabi-i686-pc-linux-gnu.tar.bz2
+<span class="c1">#arm-none-linux-gnueabi-gcc -v</span>
+gcc version 4.8.3 <span class="m">20140320</span> <span class="o">(</span>prerelease<span class="o">)</span> <span class="o">(</span>Sourcery CodeBench Lite 2014.05-29<span class="o">)</span>
+</pre></div>
+
+
+<ul>
+<li><strong>同步库 linux-omap (Kernel ...</strong></li></ul> </div><!-- /.entry-content -->
+
+								<div class="medium primary btn"><a href="http://kgat96.github.io/articles/2015/05/01/build-new-kernel-on-pandaboard/" rel="bookmark" title="Permalink to PandaBoard ES 下 Kernel 4.0.0 的移植">Read more <i class="icon-arrow-right"></i></a></div>
+
+
+
+								<div class="row tag-row">
+										<span>Tagged as : </span>
+											<a class="danger label" href="http://kgat96.github.io/tag/pandaboard.html">Pandaboard</a>
+								</div>
+
+
+
+				        </article></li>
+				</ol><!-- /#posts-list -->
+
+        </div><!-- /.eleven.columns -->
+        
+<div class="three columns">
+
+<div class="sidebarbg">
+	<h4>Pages</h4>
+	<ul>
+		  <li><a href="/functions/tags.html">Tags</a></li>
+		  <li><a href="/functions/archives.html">Archives</a></li>
+	</ul>
+</div>
+
+
+
+
+<div class="social sidebarbg">
+	<nav class="widget">
+	  <h4>Social</h4>
+	  <ul>
+		<li><a target="_blank" href="https://github.com/">GitHub</a></li>
+		<li><a target="_blank" href="https://www.facebook.com/">FaceBook</a></li>
+	  </ul>
+	</nav>
+</div>
+
+<nav class="widget sidebarbg">
+  <h4>Links</h4>
+  <ul>
+	<li><a target="_blank" href="http://getpelican.com/">Pelican</a></li>
+	<li><a target="_blank" href="http://python.org/">Python.org</a></li>
+	<li><a target="_blank" href="http://jinja.pocoo.org/">Jinja2</a></li>
+  </ul>
+</nav>
+
+</div> </div><!-- /.row -->
+
+<p class="paginator">
+    Page 1 / 1
+</p>
+</section><!-- /#content -->
+
+       </div><!-- /.row -->
+    </div><!-- /.container -->
+
+
+       <div class="container.nopad bg">
+
+    
+        <footer id="credits" class="row">
+          <div class="seven columns left-center">
+
+                   <address id="about" class="vcard body">
+                    Proudly powered by <a href="http://getpelican.com/">Pelican</a>,
+                    which takes great advantage of <a href="http://python.org">Python</a>.
+                    <br />
+                    Based on the <a target="_blank" href="http://gumbyframework.com">Gumby Framework</a>
+                    </address>
+          </div>
+
+
+          <div class="seven columns">
+            <div class="row">
+              <ul class="socbtns">
+
+                <li><div class="btn primary"><a href="https://github.com/" target="_blank">Github</a></div></li>
+
+
+                <li><div class="btn facebook"><a href="https://www.facebook.com/" target="_blank">Facebook</a></div></li>
+
+
+              </ul>
+            </div>
+          </div>
+        </footer>
+
+    </div>
+
+
+<script type="text/javascript">
+    var disqus_shortname = 'kgat96';
+    (function () {
+        var s = document.createElement('script'); s.async = true;
+        s.type = 'text/javascript';
+        s.src = 'http://' + disqus_shortname + '.disqus.com/count.js';
+        (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+    }());
+</script>
+  <script src="http://kgat96.github.io/theme/js/libs/jquery-1.9.1.min.js"></script>
+  <script src="http://kgat96.github.io/theme/js/libs/gumby.min.js"></script>
+  <script src="http://kgat96.github.io/theme/js/plugins.js"></script>
+	<script>
+	(function() {
+		var $backToTopTxt = "返回顶部", $backToTopEle = $('<div class="backToTop"></div>').appendTo($("body"))
+			.text($backToTopTxt).attr("title", $backToTopTxt).click(function() {
+				$("html, body").animate({ scrollTop: 0 }, 120);
+		}), $backToTopFun = function() {
+			var st = $(document).scrollTop(), winh = $(window).height();
+			(st > 0)? $backToTopEle.show(): $backToTopEle.hide();
+			//IE6下的定位
+			if (!window.XMLHttpRequest) {
+				$backToTopEle.css("top", st + winh - 166);
+			}
+		};
+		$(window).bind("scroll", $backToTopFun);
+		$(function() { $backToTopFun(); });
+	})();
+	</script>
+</body>
+</html>
