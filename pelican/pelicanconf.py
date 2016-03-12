@@ -5,7 +5,7 @@ from os import getenv
 
 SUTHOR = u'Kage Shen'
 SITENAME = u'Kage\'s Blog'
-SITEURL = u'http://kgat96.github.io/'
+SITEURL = u'http://blog.kfatso.com/'
 #SITEURL = '//' + getenv("SITEURL", default='localhost:8000')
 
 PATH = 'content'
@@ -23,8 +23,7 @@ AUTHOR_FEED_RSS = None
 
 # Blogroll
 LINKS = (('Pelican', 'http://getpelican.com/'),
-         ('Python.org', 'http://python.org/'),
-         ('Jinja2', 'http://jinja.pocoo.org/'),)
+         ('Python.org', 'http://python.org/'),)
 
 # Social widget
 SOCIAL = ( ('GitHub', 'https://github.com/'),     
