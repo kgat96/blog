@@ -1,9 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<feed xmlns="http://www.w3.org/2005/Atom"><title>Kage's Blog</title><link href="http://blog.kfatso.com/" rel="alternate"></link><link href="http://blog.kfatso.com/feeds/all.atom.xml" rel="self"></link><id>http://blog.kfatso.com/</id><updated>2016-07-17T00:00:00+08:00</updated><entry><title>Pandaboard 中断流程和中断服务函数</title><link href="http://blog.kfatso.com/articles/2016/07/17/pandaboard-zhong-duan-liu-cheng-he-zhong-duan-fu-wu-han-shu/" rel="alternate"></link><updated>2016-07-17T00:00:00+08:00</updated><author><name></name></author><id>tag:blog.kfatso.com,2016-07-17:articles/2016/07/17/pandaboard-zhong-duan-liu-cheng-he-zhong-duan-fu-wu-han-shu/</id><summary type="html">&lt;p&gt;Date: 2016-07-17 12:00
-Tags: arm, pandaboard
-Slug: enable-gpio-input-interrupt
-Author: Kage Shen&lt;/p&gt;
-&lt;blockquote&gt;
+<feed xmlns="http://www.w3.org/2005/Atom"><title>Kage's Blog</title><link href="http://blog.kfatso.com/" rel="alternate"></link><link href="http://blog.kfatso.com/feeds/all.atom.xml" rel="self"></link><id>http://blog.kfatso.com/</id><updated>2016-07-17T12:00:00+08:00</updated><entry><title>Pandaboard 中断流程和中断服务函数</title><link href="http://blog.kfatso.com/articles/2016/07/17/enable-gpio-input-interrupt/" rel="alternate"></link><updated>2016-07-17T12:00:00+08:00</updated><author><name>Kage Shen</name></author><id>tag:blog.kfatso.com,2016-07-17:articles/2016/07/17/enable-gpio-input-interrupt/</id><summary type="html">&lt;blockquote&gt;
 &lt;h3&gt;主要内容:&lt;/h3&gt;
 &lt;p&gt;armV7 使用GIC来管理中断, 功能许多, 但是如何开启一个普通的中断却让我花费了不少时间,&lt;br /&gt;
 因为中间的信息量太大了, 不能很快的抽取出想要的流程.&lt;br /&gt;
@@ -14,20 +10,20 @@ Author: Kage Shen&lt;/p&gt;
 &lt;h3&gt;解决问题&lt;/h3&gt;
 &lt;p&gt;更具原理图(panda-es-b-schematic.pdf)可以看到, 按键S2是GPIO-113.&lt;/p&gt;
 &lt;p&gt;这样的话, 我们就按照下面的配置流程一一向下走:&lt;/p&gt;
-&lt;p&gt;1, Control Module: gpio 模式/双向/上拉 (Pad Configuration Register Functionality) &lt;br /&gt;
+&lt;p&gt;&lt;strong&gt;1, Control Module: gpio 模式/双向/上拉 (Pad Configuration Register Functionality)&lt;/strong&gt;
    Pad Configuration Register Functionality&lt;br /&gt;
    这里设置为gpio模式: PTU | IEN | M3  &lt;/p&gt;
-&lt;p&gt;2, General-Purpose Interface: 设置为输入, 边缘触发, 使能cpu0中断信号&lt;br /&gt;
+&lt;p&gt;&lt;strong&gt;2, General-Purpose Interface: 设置为输入, 边缘触发, 使能cpu0中断信号&lt;/strong&gt;
    GPIO_OE 设置为输入模式 &lt;br /&gt;
    FALLINGDETECT 设置为 Falling edge detection enabled&lt;br /&gt;
    GPIO_IRQSTATUS_RAW_0 / GPIO_IRQSTATUS_0  &lt;/p&gt;
-&lt;p&gt;3, Vector Base Address Register (VBAT) 设置中断向量起始地址&lt;br /&gt;
+&lt;p&gt;&lt;strong&gt;3, Vector Base Address Register (VBAT) 设置中断向量起始地址&lt;/strong&gt;
    这里需要说明的是, ddr初始话的时候, 内存起始地址会设置到0x80000000(uboot) 上, 那么&lt;br /&gt;
    默认的VBAT[0]肯定是不能用的, 那么就需要我们改写这个地址.&lt;br /&gt;
    读写指令:&lt;br /&gt;
    read: "MRC p15, 0, r2, c12, c0, 0" @&lt;br /&gt;
    wirte: "mcr p15, 0, r0, c12, c0, 0"  @Set VBAR  &lt;/p&gt;
-&lt;p&gt;4, ARM Generic Interrupt Controller&lt;br /&gt;
+&lt;p&gt;&lt;strong&gt;4, ARM Generic Interrupt Controller&lt;/strong&gt;
    GICD_CTLR: Enables the forwarding of pending interrupts from the Distributor to the CPU interfaces.&lt;br /&gt;
    GICD_TYPER: TYPER[4:0] contains an encoded number of available interrupts&lt;br /&gt;
    GICD_IGROUPRn: The GICD_IGROUPR registers provide a status bit for each interrupt supported by the GIC.&lt;br /&gt;
@@ -40,7 +36,18 @@ Author: Kage Shen&lt;/p&gt;
 [1]: &lt;a href="http://pandaboard.org/sites/default/files/board_reference/pandaboard-es-b/panda-es-b-schematic.pdf"&gt;panda-es-b-schematic.pdf&lt;/a&gt;&lt;br /&gt;
 [2]: &lt;a href="http://www.ti.com/product/omap4460"&gt;TI omap4460&lt;/a&gt;&lt;br /&gt;
 [3]: &lt;a href="http://download.csdn.net/detail/heyuanxianzi/7568191"&gt;ARM Architecture Reference Manual (ARMv7-A and ARMv7-R edition)&lt;/a&gt;  &lt;/p&gt;
-&lt;/blockquote&gt;</summary></entry><entry><title>Pandaboard 配置gpio功能 (uboot 2016.1)</title><link href="http://blog.kfatso.com/articles/2016/01/31/enable-nonessential-clk-gpio/" rel="alternate"></link><updated>2016-01-31T12:00:00+08:00</updated><author><name>Kage Shen</name></author><id>tag:blog.kfatso.com,2016-01-31:articles/2016/01/31/enable-nonessential-clk-gpio/</id><summary type="html">&lt;blockquote&gt;
+&lt;/blockquote&gt;</summary><category term="arm"></category><category term="pandaboard"></category></entry><entry><title>在Conkiti中加入新的平台设备</title><link href="http://blog.kfatso.com/articles/2016/05/24/generate-new-board-in-conkiti/" rel="alternate"></link><updated>2016-05-24T12:00:00+08:00</updated><author><name>Kage Shen</name></author><id>tag:blog.kfatso.com,2016-05-24:articles/2016/05/24/generate-new-board-in-conkiti/</id><summary type="html">&lt;blockquote&gt;
+&lt;h3&gt;主要内容:&lt;/h3&gt;
+&lt;p&gt;最近在看一些关于Iot的东西, 那也是发现了conkiti这个os, 它已经存在很长时间了, 但是
+相关的资料在网上确实很少. 我这文章主要是介绍如何在conkiti中加入自己的平台设备.
+&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h3&gt;准备工作&lt;/h3&gt;
+&lt;p&gt;1, Windows环境下搭建arm开发环境&lt;br /&gt;
+    a, 下载安装编译器, gcc-arm-none-eabi-5_3-2016q1-20160330-win32.zip
+    b, 安装&lt;/p&gt;
+&lt;p&gt;2, 熟悉的IDE
+3, 下载源代码, 及芯片手册  &lt;/p&gt;</summary><category term="conkiti"></category><category term="arm"></category></entry><entry><title>Pandaboard 配置gpio功能 (uboot 2016.1)</title><link href="http://blog.kfatso.com/articles/2016/01/31/enable-nonessential-clk-gpio/" rel="alternate"></link><updated>2016-01-31T12:00:00+08:00</updated><author><name>Kage Shen</name></author><id>tag:blog.kfatso.com,2016-01-31:articles/2016/01/31/enable-nonessential-clk-gpio/</id><summary type="html">&lt;blockquote&gt;
 &lt;h3&gt;主要内容:&lt;/h3&gt;
 &lt;p&gt;很久没有更新博客了, 最近买了域名, 于是乎心血来潮, 决定更新一篇小文.&lt;br /&gt;
 其实最近在用这个板子来配置一个外设但是什么都配置不好, 比如连设置一个IO口都不行.&lt;br /&gt;

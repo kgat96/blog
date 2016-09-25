@@ -1,5 +1,4 @@
 Title: Pandaboard 中断流程和中断服务函数
-
 Date: 2016-07-17 12:00
 Tags: arm, pandaboard
 Slug: enable-gpio-input-interrupt
@@ -18,23 +17,23 @@ Author: Kage Shen
 
 这样的话, 我们就按照下面的配置流程一一向下走:
 
-1, Control Module: gpio 模式/双向/上拉 (Pad Configuration Register Functionality)   
+**1, Control Module: gpio 模式/双向/上拉 (Pad Configuration Register Functionality)**
    Pad Configuration Register Functionality  
    这里设置为gpio模式: PTU | IEN | M3  
 
-2, General-Purpose Interface: 设置为输入, 边缘触发, 使能cpu0中断信号  
+**2, General-Purpose Interface: 设置为输入, 边缘触发, 使能cpu0中断信号**
    GPIO_OE 设置为输入模式   
    FALLINGDETECT 设置为 Falling edge detection enabled  
    GPIO_IRQSTATUS_RAW_0 / GPIO_IRQSTATUS_0  
-   
-3, Vector Base Address Register (VBAT) 设置中断向量起始地址  
+
+**3, Vector Base Address Register (VBAT) 设置中断向量起始地址**
    这里需要说明的是, ddr初始话的时候, 内存起始地址会设置到0x80000000(uboot) 上, 那么  
    默认的VBAT[0]肯定是不能用的, 那么就需要我们改写这个地址.  
    读写指令:  
    read: "MRC p15, 0, r2, c12, c0, 0" @  
    wirte: "mcr p15, 0, r0, c12, c0, 0"  @Set VBAR  
    
-4, ARM Generic Interrupt Controller  
+**4, ARM Generic Interrupt Controller**
    GICD_CTLR: Enables the forwarding of pending interrupts from the Distributor to the CPU interfaces.  
    GICD_TYPER: TYPER[4:0] contains an encoded number of available interrupts  
    GICD_IGROUPRn: The GICD_IGROUPR registers provide a status bit for each interrupt supported by the GIC.  
