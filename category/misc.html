@@ -56,6 +56,45 @@
 		
 		         <ol id="post-list">
 				        <li><article class="hentry">
+				                <header> <h2 class="entry-title"><a href="http://blog.kfatso.com/articles/2016/07/17/pandaboard-zhong-duan-liu-cheng-he-zhong-duan-fu-wu-han-shu/" rel="bookmark" title="Permalink to Pandaboard 中断流程和中断服务函数">Pandaboard 中断流程和中断服务函数</a></h2> </header>
+				                <footer class="post-info">
+				                    <!--<abbr class="published" title="2016-07-17T00:00:00+08:00"> Sun 17 July 2016 </abbr>
+-->
+								 <address class="vcard author" style="font-style:italic;">
+									Sun 17 July 2016
+								  </address>
+									
+				                </footer><!-- /.post-info -->
+				                <div class="entry-content"> <p>Date: 2016-07-17 12:00
+Tags: arm, pandaboard
+Slug: enable-gpio-input-interrupt
+Author: Kage Shen</p>
+<blockquote>
+<h3>主要内容:</h3>
+<p>armV7 使用GIC来管理中断, 功能许多, 但是如何开启一个普通的中断却让我花费了不少时间,<br />
+因为中间的信息量太大了, 不能很快的抽取出想要的流程.<br />
+所以这里也是跟着流程一点点的看看.   </p>
+</blockquote>
+<h3>问题发现</h3>
+<p>探索中断流程, 以按键中断为例子</p>
+<h3>解决问题</h3>
+<p>更具原理图(panda-es-b-schematic.pdf)可以看到, 按键S2是GPIO-113.</p>
+<p>这样的话, 我们就按照下面的配置流程一一向下走:</p>
+<p>1, Control Module: gpio 模式/双向/上拉 (Pad Configuration Register Functionality) <br />
+   Pad Configuration Register Functionality<br />
+   这里设置为gpio模式: PTU | IEN | M3 ...</p> </div><!-- /.entry-content -->
+
+								<div class="medium primary btn"><a href="http://blog.kfatso.com/articles/2016/07/17/pandaboard-zhong-duan-liu-cheng-he-zhong-duan-fu-wu-han-shu/" rel="bookmark" title="Permalink to Pandaboard 中断流程和中断服务函数">Read more <i class="icon-arrow-right"></i></a></div>
+
+
+
+								<div class="row tag-row">
+								</div>
+
+
+
+				        </article></li>
+				        <li><article class="hentry">
 				                <header> <h2 class="entry-title"><a href="http://blog.kfatso.com/articles/2016/01/31/enable-nonessential-clk-gpio/" rel="bookmark" title="Permalink to Pandaboard 配置gpio功能 (uboot 2016.1)">Pandaboard 配置gpio功能 (uboot 2016.1)</a></h2> </header>
 				                <footer class="post-info">
 				                    <!--<abbr class="published" title="2016-01-31T12:00:00+08:00"> Sun 31 January 2016 </abbr>
@@ -113,7 +152,7 @@
 </blockquote>
 <h3>准备工作</h3>
 <p>1, Linux 64bit 系统电脑一台<br />
-2, 熟悉的编译器, 最好有代码引索功能的, 免得grep蛋疼<br />
+2, 熟悉的编译器, 最好有代码引索功能的, 免得找得蛋疼<br />
 3, 下载源代码, 及芯片手册  </p>
 <h3>引导流程从这里开始</h3>
 <p><strong>寻找srart源头:</strong></p>
