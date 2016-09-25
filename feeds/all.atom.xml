@@ -6,31 +6,31 @@
 所以这里也是跟着流程一点点的看看.   &lt;/p&gt;
 &lt;/blockquote&gt;
 &lt;h3&gt;问题发现&lt;/h3&gt;
-&lt;p&gt;探索中断流程, 以按键中断为例子&lt;/p&gt;
+&lt;p&gt;探索中断流程, 以按键中断为例子  &lt;/p&gt;
 &lt;h3&gt;解决问题&lt;/h3&gt;
-&lt;p&gt;更具原理图(panda-es-b-schematic.pdf)可以看到, 按键S2是GPIO-113.&lt;/p&gt;
-&lt;p&gt;这样的话, 我们就按照下面的配置流程一一向下走:&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;1, Control Module: gpio 模式/双向/上拉 (Pad Configuration Register Functionality)&lt;/strong&gt;
+&lt;p&gt;更具原理图(panda-es-b-schematic.pdf)可以看到, 按键S2是GPIO-113.  &lt;/p&gt;
+&lt;p&gt;这样的话, 我们就按照下面的配置流程一一向下走:  &lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;1, Control Module: gpio 模式/双向/上拉 (Pad Configuration Register Functionality)&lt;/strong&gt;&lt;br /&gt;
    Pad Configuration Register Functionality&lt;br /&gt;
    这里设置为gpio模式: PTU | IEN | M3  &lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;2, General-Purpose Interface: 设置为输入, 边缘触发, 使能cpu0中断信号&lt;/strong&gt;
+&lt;p&gt;&lt;strong&gt;2, General-Purpose Interface: 设置为输入, 边缘触发, 使能cpu0中断信号&lt;/strong&gt;&lt;br /&gt;
    GPIO_OE 设置为输入模式 &lt;br /&gt;
    FALLINGDETECT 设置为 Falling edge detection enabled&lt;br /&gt;
    GPIO_IRQSTATUS_RAW_0 / GPIO_IRQSTATUS_0  &lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;3, Vector Base Address Register (VBAT) 设置中断向量起始地址&lt;/strong&gt;
+&lt;p&gt;&lt;strong&gt;3, Vector Base Address Register (VBAT) 设置中断向量起始地址&lt;/strong&gt;&lt;br /&gt;
    这里需要说明的是, ddr初始话的时候, 内存起始地址会设置到0x80000000(uboot) 上, 那么&lt;br /&gt;
    默认的VBAT[0]肯定是不能用的, 那么就需要我们改写这个地址.&lt;br /&gt;
    读写指令:&lt;br /&gt;
    read: "MRC p15, 0, r2, c12, c0, 0" @&lt;br /&gt;
    wirte: "mcr p15, 0, r0, c12, c0, 0"  @Set VBAR  &lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;4, ARM Generic Interrupt Controller&lt;/strong&gt;
+&lt;p&gt;&lt;strong&gt;4, ARM Generic Interrupt Controller&lt;/strong&gt;&lt;br /&gt;
    GICD_CTLR: Enables the forwarding of pending interrupts from the Distributor to the CPU interfaces.&lt;br /&gt;
    GICD_TYPER: TYPER[4:0] contains an encoded number of available interrupts&lt;br /&gt;
    GICD_IGROUPRn: The GICD_IGROUPR registers provide a status bit for each interrupt supported by the GIC.&lt;br /&gt;
-   GICD_ITARGETSRn: Interrupt Processor Targets Registers
-   GICD_ISENABLERn: Interrupt Set-Enable Registers
-   GICC_PMR: Interrupt Priority Mask Register
-   GICC_CTLR; CPU Interface Control Register&lt;/p&gt;
+   GICD_ITARGETSRn: Interrupt Processor Targets Registers&lt;br /&gt;
+   GICD_ISENABLERn: Interrupt Set-Enable Registers&lt;br /&gt;
+   GICC_PMR: Interrupt Priority Mask Register&lt;br /&gt;
+   GICC_CTLR; CPU Interface Control Register  &lt;/p&gt;
 &lt;blockquote&gt;
 &lt;p&gt;参考资料:&lt;br /&gt;
 [1]: &lt;a href="http://pandaboard.org/sites/default/files/board_reference/pandaboard-es-b/panda-es-b-schematic.pdf"&gt;panda-es-b-schematic.pdf&lt;/a&gt;&lt;br /&gt;

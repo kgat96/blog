@@ -73,14 +73,14 @@
 所以这里也是跟着流程一点点的看看.   </p>
 </blockquote>
 <h3>问题发现</h3>
-<p>探索中断流程, 以按键中断为例子</p>
+<p>探索中断流程, 以按键中断为例子  </p>
 <h3>解决问题</h3>
-<p>更具原理图(panda-es-b-schematic.pdf)可以看到, 按键S2是GPIO-113.</p>
-<p>这样的话, 我们就按照下面的配置流程一一向下走:</p>
-<p><strong>1, Control Module: gpio 模式/双向/上拉 (Pad Configuration Register Functionality)</strong>
+<p>更具原理图(panda-es-b-schematic.pdf)可以看到, 按键S2是GPIO-113.  </p>
+<p>这样的话, 我们就按照下面的配置流程一一向下走:  </p>
+<p><strong>1, Control Module: gpio 模式/双向/上拉 (Pad Configuration Register Functionality)</strong><br />
    Pad Configuration Register Functionality<br />
    这里设置为gpio模式: PTU | IEN | M3  </p>
-<p><strong>2, General-Purpose Interface: 设置为输入, 边缘触发, 使能cpu0中断信号</strong>
+<p><strong>2, General-Purpose Interface: 设置为输入, 边缘触发, 使能cpu0中断信号</strong><br />
    GPIO_OE 设置为输入模式 <br />
    FALLINGDETECT 设置为 Falling edge ...</p> </div><!-- /.entry-content -->
 
