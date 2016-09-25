@@ -37,9 +37,9 @@ Author: Kage Shen
    GICD_CTLR: Enables the forwarding of pending interrupts from the Distributor to the CPU interfaces.  
    GICD_TYPER: TYPER[4:0] contains an encoded number of available interrupts  
    GICD_IGROUPRn: The GICD_IGROUPR registers provide a status bit for each interrupt supported by the GIC.  
-   GICD_ITARGETSRn: Interrupt Processor Targets Registers  
+   GICD_ITARGETSRn: Interrupt Processor Targets Registers   
    GICD_ISENABLERn: Interrupt Set-Enable Registers  
-   GICC_PMR: Interrupt Priority Mask Register  
+   GICC_PMR: Interrupt Priority Mask Register   
    GICC_CTLR; CPU Interface Control Register  
 
 > 参考资料:  
