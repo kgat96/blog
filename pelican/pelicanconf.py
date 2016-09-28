@@ -52,7 +52,6 @@ ARTICLE_SAVE_AS = 'articles/{date:%Y}/{date:%m}/{date:%d}/{slug}/index.html'
 #PAGE_URL = 'pages/{slug}.html'
 #PAGE_SAVE_AS = 'pages/{slug}.html'
 
-
 #TAGS_URL = 'functions/tags.html'
 #TAGS_SAVE_AS = 'functions/tags.html'
 
@@ -66,6 +65,8 @@ GITHUB_URL = 'https://github.com/'
 FACEBOOK_URL = 'https://www.facebook.com/'
 
 GOOGLE_ANALYTICS = u'UA-60962023-1'
+GOOGLE_ANALYTICS_ID = u'UA-60962023-1'
+
 DISQUS_SITENAME = u"kgat96"
 #RELATIVE_URLS = False
 
