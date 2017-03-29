@@ -6,6 +6,7 @@ from os import getenv
 AUTHOR = u'Kage Shen'
 SITENAME = u'Kage\'s Blog'
 SITEURL = u'http://blog.kfatso.com/'
+#SITEURL = u'http://vps.kfatso.com:8080/'
 #SITEURL = '//' + getenv("SITEURL", default='localhost:8000')
 
 # Uncomment following line if you want document-relative URLs when developing
