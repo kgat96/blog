@@ -14,10 +14,4 @@
 
 {% block content %}
 {% include "article_stub.html" %}
-
-{% if DISQUS_SITENAME and SITEURL and article.status != "draft" %}
-<h4>Comments</h4>
-{% include 'disqus_script.html' %}
-{% endif %}
-
 {% endblock %}

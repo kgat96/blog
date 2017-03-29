@@ -3,16 +3,20 @@
 from __future__ import unicode_literals
 from os import getenv
 
-SUTHOR = u'Kage Shen'
+AUTHOR = u'Kage Shen'
 SITENAME = u'Kage\'s Blog'
 SITEURL = u'http://blog.kfatso.com/'
 #SITEURL = '//' + getenv("SITEURL", default='localhost:8000')
+
+# Uncomment following line if you want document-relative URLs when developing
+RELATIVE_URLS = False
 
 PATH = 'content'
 TIMEZONE = 'Asia/Hong_Kong'
 DEFAULT_LANG = 'en'
 THEME = 'gum'
 
+#DEFAULT_LANG = u'Chinese (Traditional)'
 
 # Feed generation is usually not desired when developing
 FEED_ALL_ATOM = 'feeds/all.atom.xml'
@@ -31,8 +35,6 @@ SOCIAL = ( ('GitHub', 'https://github.com/'),
 
 DEFAULT_PAGINATION = 10
 
-# Uncomment following line if you want document-relative URLs when developing
-#RELATIVE_URLS = True
 
 ################################
 
@@ -68,16 +70,9 @@ GOOGLE_ANALYTICS = u'UA-60962023-1'
 GOOGLE_ANALYTICS_ID = u'UA-60962023-1'
 
 DISQUS_SITENAME = u"kgat96"
-#RELATIVE_URLS = False
 
 # plugins
 PLUGIN_PATH = 'plugins'
 PLUGINS = ['summary','sitemap','neighbors','global_license']
-
-
-
-
-
-
 
 
