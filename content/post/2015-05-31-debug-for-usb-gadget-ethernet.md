@@ -82,7 +82,9 @@ enp0s20u9i1: flags=4163<UP,BROADCAST,RUNNING,MULTICAST>  mtu 1500
 ```bash
 #ifconfig enp0s20u13i1 192.168.0.201 netmask 255.255.255.0 up
 ```
+
 现在就可以ping一下开发板了：
+
 ```bash
 #ping 192.168.0.200
 ```

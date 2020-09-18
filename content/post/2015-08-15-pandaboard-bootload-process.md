@@ -13,6 +13,7 @@ contentCopyright: '<a href="https://github.com/" rel="noopener" target="_blank">
 ---
 
 ## 主要内容:
+
 之前使用的uboot都是直接编译就可以使用了, 但是作为一个愿意折腾的人, 这样的程度显然不够,
 于是一如既往的打开了uboot的代码看起来吧!
 

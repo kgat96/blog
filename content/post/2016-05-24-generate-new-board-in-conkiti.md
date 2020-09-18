@@ -12,8 +12,8 @@ contentCopyright: '<a href="https://github.com/" rel="noopener" target="_blank">
 
 ---
 
-
 ## 主要内容:
+
 最近在看一些关于Iot的东西, 那也是发现了conkiti这个os, 它已经存在很长时间了, 但是
 相关的资料在网上确实很少. 我这文章主要是介绍如何在conkiti中加入自己的平台设备.
 
