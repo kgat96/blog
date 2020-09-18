@@ -145,7 +145,7 @@ mkimage -A arm -O linux -T kernel -C none -a 0x80008000 -e 0x80008000 \
 
 好了终于可以看到他启动了 : )
 
-![boot log](img.kkdoit.com/blog/build-new-kernel-on-pandaboard-p2.png)
+![boot log](https://img.kkdoit.com/blog/build-new-kernel-on-pandaboard-p2.png)
 
 > **Note:**
 > 这里 omap4-panda-es.dtb 就是板级配置文件了，上面是将他和 zImage 和到了一起，实际上还有一种
