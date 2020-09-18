@@ -1,0 +1,94 @@
+---
+title: "Archlinux Setup Quartus II 15.0"
+date: 2015-08-08T08:03:48+08:00
+lastmod: 2017-08-31T15:43:48+08:00
+draft: false
+tags: ["FPGA", "Linux"]
+categories: ["学习"]
+author: "KK"
+
+autoCollapseToc: true
+contentCopyright: '<a href="https://github.com/" rel="noopener" target="_blank">MIT</a>'
+
+---
+
+## 主要内容:
+
+> 因为工作需要使用到 Quartus II, 于是乎就整了个XP电脑, 装了软件, 只是用习惯了Linux  
+> 突然又要我用XP, 只能是让我无力吐槽啊, 发现Quartus有linux版本的, 果断安装之, 装完  
+> 后面x解的事情就交给你们自己了, 我就不说了 ...  
+
+## 准备工作
+
+1, Linux 64bit 系统电脑一台
+
+## 下载 Quartus II 15.0 软件
+
+送上[下载地址](http://download.altera.com/akdlm/software/acdsinst/15.0/145/ib_installers/QuartusSetup-15.0.0.145-linux.run), 请叫我雷锋!  
+这个版本是自带 Cyclone IV 库的 (安装的时候可以选择安装)
+
+## 安装配置
+
+1, 加上执行权限把
+
+```bash
+#chmod +x QuartusSetup-15.0.0.145-linux.run
+```
+
+2, 安装
+
+这里你就直接运行它就可以了, 中间需要你选择安装路径什么的, 相信你都会吧 :)
+
+安装好后 就可以直接运行了:
+
+```bash
+#./altera/15.0/quartus/bin/quartus --64bit
+```
+
+不过你会发现它启动不了, 好吧, 再终端命令行里执行一下, 发现如下错误:
+
+```bash
+libpng12.so.0: cannot open shared object file
+```
+
+一番谷歌后了解到, 这个库现在已经不用了, 所以很多机器没用这个库了,
+那么就需要我们自己安装一个这样的库咯, 我用的是 archlinux, 其它的发行版应该类似.
+
+```bash
+wget https://aur.archlinux.org/packages/li/libpng12/PKGBUILD
+makepkg ./PKGBUILD
+makepkg -i ./PKGBUILD
+```
+
+实际上它就是下载了一个libpng, 编译安装的, 所以这个方法也可以试试.  
+http://sourceforge.net/projects/libpng/files/libpng-12.tar.xz
+
+到了这个, 这个软件基本就能用了, 那么我可以还需要使用到 USB Blaster, 需要配置一下
+USB设备的权限, 如下:
+
+```bash
+#touch /etc/udev/rules.d/51-altera-usb-blaster.rules
+```
+
+加入一下内容:
+
+```bash
+SUBSYSTEM=="usb", ATTR{idVendor}=="09fb", ATTR{idProduct}=="6001", MODE="0666"
+SUBSYSTEM=="usb", ATTR{idVendor}=="09fb", ATTR{idProduct}=="6002", MODE="0666"
+SUBSYSTEM=="usb", ATTR{idVendor}=="09fb", ATTR{idProduct}=="6003", MODE="0666"
+SUBSYSTEM=="usb", ATTR{idVendor}=="09fb", ATTR{idProduct}=="6010", MODE="0666"
+SUBSYSTEM=="usb", ATTR{idVendor}=="09fb", ATTR{idProduct}=="6810", MODE="0666"
+```
+
+重启一下电脑, 打开软件, 就能识别你的usb硬件了.
+
+最后, 有图有真相嘛:  
+
+![picture](https://img.kkdoit.com/blog/archlinux-setup-quartus-15-p1.png)
+
+> 参考资料:  
+> [1]: [Altera Design Software](https://wiki.archlinux.org/index.php/Altera_Design_Software)  
+> [2]: [注(po)册(jie)](http://bbs.eetop.cn/viewthread.php?tid=485257)  
+  
+   
+  

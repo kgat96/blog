@@ -14,12 +14,12 @@ contentCopyright: '<a href="https://github.com/" rel="noopener" target="_blank">
 
 ## 主要内容:
 
-当你调试的使用如果有网络,是不是很方便呢!但是你想搭建环境的时候却发现各种麻
-烦,例如需要专门的硬件(路由器),需要一根网线链接，没有路由的话可能要来回插
-拔网线,很是麻烦.大家电脑USB口都很多,那为什么不用USB来的调试板子呢?如果能
-像ADB一样,那多方便啊,但是人家是Android啊,我们在调基本的linux的时候没有ADB
-这样的服务啊,那能不能USB转网口来通信呢?网络一通什么nfs,ssh都能用了, 其他的
-什么的都是浮云了，于是成文共享.
+当你调试的使用如果有网络, 是不是很方便呢! 但是你想搭建环境的时候却发现各种麻
+烦, 例如需要专门的硬件(路由器), 需要一根网线链接, 没有路由的话可能要来回插
+拔网线,很是麻烦. 大家电脑USB口都很多, 那为什么不用USB来的调试板子呢? 如果能
+像ADB一样,那多方便啊, 但是人家是Android啊, 我们在调基本的linux的时候没有ADB
+这样的服务啊, 那能不能USB转网口来通信呢? 网络一通什么nfs, ssh都能用了, 其他的
+什么的都是浮云了, 于是成文共享.
 
 ## 准备工作
 
@@ -45,7 +45,7 @@ contentCopyright: '<a href="https://github.com/" rel="noopener" target="_blank">
     [*] USB Gadget Drivers (CONFIG_USB_ETH)
 ```
 
-这里是已经配置好的 **[config](http://7xigc2.com1.z0.glb.clouddn.com/omap2plus_defconfig.txt)**，我的是 linux4.0 版本，不过里面的选项差不多，对比USB部分配置即可。
+这里是已经配置好的 **[config](http://https://img.kkdoit.com/blog/omap2plus_defconfig.txt)**，我的是 linux4.0 版本，不过里面的选项差不多，对比USB部分配置即可。
 
 ## 配置网络
 
