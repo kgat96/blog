@@ -24,7 +24,7 @@ contentCopyright: '<a href="https://github.com/" rel="noopener" target="_blank">
 
 2，Linux系统电脑一台
 
-3，> 2G SD卡一张
+3，2G SD卡一张
 
 4，搭建编译环境
 
@@ -85,7 +85,7 @@ Device     Boot  Start     End Sectors  Size Id Type
 
 最新的Uboot整的和Kernel的一样的图形化的配置界面了，略屌.
 
-![uboot menuconfig](http://7xigc2.com1.z0.glb.clouddn.com/build-new-kernel-on-pandaboard-p1.png)
+![uboot menuconfig](https://img.kkdoit.com/blog/build-new-kernel-on-pandaboard-p1.png)
 
 那么编译自然也和Kernel一样啦，这里先不对Uboot做修改，免得大家看不懂哈
 
