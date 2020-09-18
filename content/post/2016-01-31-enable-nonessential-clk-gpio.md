@@ -12,23 +12,23 @@ contentCopyright: '<a href="https://github.com/" rel="noopener" target="_blank">
 
 ---
 
-## 主要内容: 
- 
-很久没有更新博客了, 最近买了域名, 于是乎心血来潮, 决定更新一篇小文.  
-其实最近在用这个板子来配置一个外设但是什么都配置不好, 比如连设置一个IO口都不行.  
-于是乎做了一堆对比, 希望能给你们节省一些调试时间.  
+## 主要内容:
+
+很久没有更新博客了, 最近买了域名, 于是乎心血来潮, 决定更新一篇小文.
+其实最近在用这个板子来配置一个外设但是什么都配置不好, 比如连设置一个IO口都不行.
+于是乎做了一堆对比, 希望能给你们节省一些调试时间.
 
 ## 问题发现
 
-我先在使用的是linux4.0+uboot12.1, 按照网上[Toggling_an_LED_on_Pandaboard_using_GPIO](omappedia.org/wiki/Toggling_an_LED_on_Pandaboard_using_GPIO)介绍操作, 发现功能不能用,  
+我先在使用的是linux4.0+uboot12.1, 按照网上[Toggling_an_LED_on_Pandaboard_using_GPIO](https://omappedia.org/wiki/Toggling_an_LED_on_Pandaboard_using_GPIO)介绍操作, 发现功能不能用,
 
 ## 查找问题
 
-因为pandaboard这个板子已经比较老了, 估计是现在的新代码支持不好, 准备用较老的软件来试试点灯,  
-功夫不负有心人, [在Gentoo的Arm项目上找到了pandaboard的支持](https://wiki.gentoo.org/wiki/Pandaboard), 于是下载对应编译好的工程, 惊奇发现, 上面的实验可以了! 于是剩下的工作就是找到他们的不同处了, 通过uboot的打印发现, 他的版本号是 2011.12, 于是主要查看了,  
-2011.12~2016.1之间关于omap的提交, 于是发现下面两位大牛的提交:  
+因为pandaboard这个板子已经比较老了, 估计是现在的新代码支持不好, 准备用较老的软件来试试点灯,
+功夫不负有心人, [在Gentoo的Arm项目上找到了pandaboard的支持](https://wiki.gentoo.org/wiki/Pandaboard), 于是下载对应编译好的工程, 惊奇发现, 上面的实验可以了! 于是剩下的工作就是找到他们的不同处了, 通过uboot的打印发现, 他的版本号是 2011.12, 于是主要查看了,
+2011.12~2016.1之间关于omap的提交, 于是发现下面两位大牛的提交:
 
-[ARM: OMAP4/5: Do not configure non essential pads, clocks, dplls.](https://github.com/trini/u-boot/commit/f3f98bb0b8cc520e08ea2bdfc3f9cbe4e4ac29f5)  
+[ARM: OMAP4/5: Do not configure non essential pads, clocks, dplls.](https://github.com/trini/u-boot/commit/f3f98bb0b8cc520e08ea2bdfc3f9cbe4e4ac29f5)
 ```
 ARM: OMAP4/5: Do not configure non essential pads, clocks, dplls.
 
@@ -42,7 +42,7 @@ is the only way to get things fixed in the kernel.
 
 Signed-off-by: R Sricharan <r.sricharan@ti.com>
 ```
-[ARM: OMAP4/5: Remove dead code against CONFIG_SYS_ENABLE_PADS_ALL](https://github.com/trini/u-boot/commit/e81f63f0d2acb130df68da52e711f9178592a012)  
+[ARM: OMAP4/5: Remove dead code against CONFIG_SYS_ENABLE_PADS_ALL](https://github.com/trini/u-boot/commit/e81f63f0d2acb130df68da52e711f9178592a012)
 ```
 ARM: OMAP4/5: Remove dead code against CONFIG_SYS_ENABLE_PADS_ALL
 
@@ -53,25 +53,25 @@ renders some code unreachable. Remove that code.
 
 Signed-off-by: Jassi Brar <jaswinder.singh@linaro.org>
 ```
-**哇... 原来是他们把"不需要的" 引脚, 时钟, 等等外设都给关闭了, 有没有想过, 我们初学者的感呢 ?  
-他们这样一提交, 给我们造成巨大的时间损失啊!**  
+**哇... 原来是他们把"不需要的" 引脚, 时钟, 等等外设都给关闭了, 有没有想过, 我们初学者的感呢 ?
+他们这样一提交, 给我们造成巨大的时间损失啊!**
 
 ## 解决问题
 
-好吧, 既然问题已经找到, 我们就把对应的补丁放上去就可以了,  
+好吧, 既然问题已经找到, 我们就把对应的补丁放上去就可以了,
 ```diff
 diff --git a/arch/arm/cpu/armv7/omap-common/hwinit-common.c b/arch/arm/cpu/armv7/omap-common/hwinit-common.c
 index 80794f9..ee43320 100644
 --- a/arch/arm/cpu/armv7/omap-common/hwinit-common.c
 +++ b/arch/arm/cpu/armv7/omap-common/hwinit-common.c
 @@ -38,6 +38,7 @@ static void set_mux_conf_regs(void)
- 		set_muxconf_regs_essential();
- 		break;
- 	case OMAP_INIT_CONTEXT_UBOOT_AFTER_SPL:
-+	    set_muxconf_regs_non_essential();
- 		break;
- 	case OMAP_INIT_CONTEXT_UBOOT_FROM_NOR:
- 	case OMAP_INIT_CONTEXT_UBOOT_AFTER_CH:
+                set_muxconf_regs_essential();
+                break;
+        case OMAP_INIT_CONTEXT_UBOOT_AFTER_SPL:
++           set_muxconf_regs_non_essential();
+                break;
+        case OMAP_INIT_CONTEXT_UBOOT_FROM_NOR:
+        case OMAP_INIT_CONTEXT_UBOOT_AFTER_CH:
 diff --git a/arch/arm/include/asm/arch-omap4/sys_proto.h b/arch/arm/include/asm/arch-omap4/sys_proto.h
 index f30f865..a110613 100644
 --- a/arch/arm/include/asm/arch-omap4/sys_proto.h
@@ -89,9 +89,9 @@ index eb9ce63..b5021c5 100644
 --- a/board/ti/panda/panda.c
 +++ b/board/ti/panda/panda.c
 @@ -286,6 +286,25 @@ void set_muxconf_regs_essential(void)
- 			   sizeof(struct pad_conf_entry));
+                           sizeof(struct pad_conf_entry));
  }
- 
+
 +void set_muxconf_regs_non_essential(void)
 +{
 +    do_set_mux((*ctrl)->control_padconf_core_base,
@@ -119,9 +119,9 @@ index 53c7080..11fcd32 100644
 --- a/board/ti/panda/panda_mux_data.h
 +++ b/board/ti/panda/panda_mux_data.h
 @@ -78,10 +78,215 @@ const struct pad_conf_entry wkup_padconf_array_essential[] = {
- 
+
  };
- 
+
 +//const struct pad_conf_entry wkup_padconf_array_essential_4460[] = {
 +//
 +//{PAD1_FREF_CLK4_REQ, (M3)}, /* gpio_wk7 for TPS: Mode 3 */
@@ -129,7 +129,7 @@ index 53c7080..11fcd32 100644
 +//};
 +
  const struct pad_conf_entry wkup_padconf_array_essential_4460[] = {
- 
+
 -{PAD1_FREF_CLK4_REQ, (M3)}, /* gpio_wk7 for TPS: Mode 3 */
 +{PAD1_FREF_CLK4_REQ, (PTU | M7)}, /* gpio_wk7 for TPS: safe mode + pull up */
 +
@@ -311,7 +311,7 @@ index 53c7080..11fcd32 100644
 +const struct pad_conf_entry core_padconf_array_non_essential_4460[] = {
 +    {ABE_MCBSP2_CLKX, (PTU | OFF_EN | OFF_OUT_PTU | M3)},       /* led status_1 */
 +};
- 
+
 +const struct pad_conf_entry wkup_padconf_array_non_essential[] = {
 +    {PAD0_SIM_IO, (IEN | M0)},      /* sim_io */
 +    {PAD1_SIM_CLK, (M0)},           /* sim_clk */
@@ -332,12 +332,12 @@ index 53c7080..11fcd32 100644
 +    {PAD0_SYS_BOOT6, (IEN | M3)},       /* gpio_wk9 */
 +    {PAD1_SYS_BOOT7, (IEN | M3)},       /* gpio_wk10 */
  };
- 
+
 +
  #endif /* _PANDA_MUX_DATA_H_ */
 ```
 
-大功告成, 再配置一下gpio, 问题解决!  
+大功告成, 再配置一下gpio, 问题解决!
 
 
 

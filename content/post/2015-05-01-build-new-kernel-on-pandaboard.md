@@ -18,7 +18,7 @@ contentCopyright: '<a href="https://github.com/" rel="noopener" target="_blank">
 实际上 **Kernel 4.0.0** 已经支持 [PandaBoard](http://pandaboard.org) 的，应该是 **Kernel** 主分支都是支持这块板子的，只是在实际让最新 Kernel 跑起来的过程中还是有一些问题的，所以本文就是告诉你一步步让它跑起来的。
 
 
-## 准备工作  
+## 准备工作
 
 1，可以正常使用的开发板一个
 
