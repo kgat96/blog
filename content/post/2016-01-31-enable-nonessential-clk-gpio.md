@@ -54,9 +54,7 @@ renders some code unreachable. Remove that code.
 Signed-off-by: Jassi Brar <jaswinder.singh@linaro.org>
 ```
 
-**哇... 原来是他们把"不需要的" 引脚, 时钟, 等等外设都给关闭了, 有没有想过, 我们初学者的感呢 ?
-
-他们这样一提交, 给我们造成巨大的时间损失啊!**
+**哇... 原来是他们把"不需要的" 引脚, 时钟, 等等外设都给关闭了, 有没有想过, 我们初学者的感呢 ? 他们这样一提交, 给我们造成巨大的时间损失啊!**
 
 ## 解决问题
 

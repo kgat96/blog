@@ -45,7 +45,7 @@ contentCopyright: '<a href="https://github.com/" rel="noopener" target="_blank">
     [*] USB Gadget Drivers (CONFIG_USB_ETH)
 ```
 
-这里是已经配置好的 **[config](http://https://img.kkdoit.com/blog/omap2plus_defconfig.txt)**，我的是 linux4.0 版本，不过里面的选项差不多，对比USB部分配置即可。
+这里是已经配置好的 **[config](https://img.kkdoit.com/blog/omap2plus_defconfig.txt)**，我的是 linux4.0 版本，不过里面的选项差不多，对比USB部分配置即可。
 
 ## 配置网络
 

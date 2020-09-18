@@ -24,7 +24,7 @@ armV7 使用GIC来管理中断, 功能许多, 但是如何开启一个普通的�
 
 ## 解决问题
 
-更具原理图(panda-es-b-schematic.pdf)可以看到, 按键S2是GPIO-113.
+更具原理图[panda-es-b-schematic.pdf](http://pandaboard.org/sites/default/files/board_reference/pandaboard-es-b/panda-es-b-schematic.pdf)可以看到, 按键S2是GPIO-113.
 
 这样的话, 我们就按照下面的配置流程一一向下走:
 
@@ -44,18 +44,20 @@ armV7 使用GIC来管理中断, 功能许多, 但是如何开启一个普通的�
    这里需要说明的是, ddr初始话的时候, 内存起始地址会设置到0x80000000(uboot) 上, 那么
    默认的VBAT[0]肯定是不能用的, 那么就需要我们改写这个地址.
    读写指令:
+   ```
    read: "MRC p15, 0, r2, c12, c0, 0" @
    wirte: "mcr p15, 0, r0, c12, c0, 0"  @Set VBAR
+   ```
 
 **4, ARM Generic Interrupt Controller**
 
-   GICD_CTLR: Enables the forwarding of pending interrupts from the Distributor to the CPU interfaces.
-   GICD_TYPER: TYPER[4:0] contains an encoded number of available interrupts
-   GICD_IGROUPRn: The GICD_IGROUPR registers provide a status bit for each interrupt supported by the GIC.
-   GICD_ITARGETSRn: Interrupt Processor Targets Registers
-   GICD_ISENABLERn: Interrupt Set-Enable Registers
-   GICC_PMR: Interrupt Priority Mask Register
-   GICC_CTLR; CPU Interface Control Register
+   **GICD_CTLR**: Enables the forwarding of pending interrupts from the Distributor to the CPU interfaces  
+   **GICD_TYPER**: TYPER[4:0] contains an encoded number of available interrupts  
+   **GICD_IGROUPRn**: The registers provide a status bit for each interrupt supported by the GIC.  
+   **GICD_ITARGETSRn**: Interrupt Processor Targets Registers  
+   **GICD_ISENABLERn**: Interrupt Set-Enable Registers  
+   **GICC_PMR**: Interrupt Priority Mask Register  
+   **GICC_CTLR**; CPU Interface Control Register  
 
 > 参考资料:
 > [1]: [panda-es-b-schematic.pdf](http://pandaboard.org/sites/default/files/board_reference/pandaboard-es-b/panda-es-b-schematic.pdf)
