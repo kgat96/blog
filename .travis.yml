@@ -8,8 +8,9 @@ language: python
 python: 3.8
 
 addons:
-  ssh_known_hosts: ${VPS7}:${SSHPORT}
+  ssh_known_hosts:
   - ${VPS7}
+  - github.com
   
 before_install:
   - sudo apt-get update -qq
