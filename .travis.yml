@@ -36,7 +36,7 @@ script:
 after_success:
   - MESSAGE=$(git log --format=%B -n 1 $TRAVIS_COMMIT)
   - cd dist
-  - ssh ${VPS7}@${SSHPORT} 'bash ~/travis.sh'
+  - ssh root@${VPS7} -p ${SSHPORT} 'bash ~/travis.sh'
   #- git init
   #- git remote add origin https://${GITHUB_USERNAME}:${GITHUB_TOKEN}@github.com/xiongdahu/xiongdahu.github.io.git
   #- git add .
