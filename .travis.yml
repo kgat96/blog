@@ -28,12 +28,14 @@ install:
 before_script:
   - openssl aes-256-cbc -K $encrypted_8154dbd2c1ae_key -iv $encrypted_8154dbd2c1ae_iv -in travis/travis.key.enc -out ~/.ssh/id_rsa -d
   - chmod 600 ~/.ssh/id_rsa
+  - echo -e "Host heroku.com\n\tStrictHostKeyChecking no\n" >> ~/.ssh/config
+  - echo -e "Host ${VPS7}\n\tStrictHostKeyChecking no\n" >> ~/.ssh/config
+  
   #- git config --global user.email ${GITHUB_EMAIL}
   #- git config --global user.name ${GITHUB_USERNAME}
 
 script:
   #- hugo -d ./dist/
-  - echo -e "Host github.com\n\tStrictHostKeyChecking no\n"
 
 after_success:
   - MESSAGE=$(git log --format=%B -n 1 $TRAVIS_COMMIT)
