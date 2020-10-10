@@ -9,7 +9,8 @@ python: 3.8
 
 addons:
   ssh_known_hosts: ${VPS7}:${SSHPORT}
-
+  - ${VPS7}
+  
 before_install:
   - sudo apt-get update -qq
   - sudo apt-get -yq install apt-transport-https
