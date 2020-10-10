@@ -36,12 +36,13 @@ before_script:
 
 script:
   #- hugo -d ./dist/
-  echo -e "Host ${VPS7}\n\tStrictHostKeyChecking no\n"
+  echo -e "HHS ${VPS7} bash ~/travis.sh\n"
+  - ssh root@${VPS7} -p ${SSHPORT} 'bash ~/travis.sh'
 
 after_success:
-  - MESSAGE=$(git log --format=%B -n 1 $TRAVIS_COMMIT)
-  - cd dist
-  - ssh root@${VPS7} -p ${SSHPORT} 'bash ~/travis.sh'
+  #- MESSAGE=$(git log --format=%B -n 1 $TRAVIS_COMMIT)
+  - ls -al
+
   #- git init
   #- git remote add origin https://${GITHUB_USERNAME}:${GITHUB_TOKEN}@github.com/xiongdahu/xiongdahu.github.io.git
   #- git add .
