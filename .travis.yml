@@ -1,0 +1,20 @@
+language: node_js
+node_js: 8
+install:
+- npm install -g hexo-cli
+- npm install -g hexo-deployer-git
+- npm install -g gulp
+- npm install
+addons:
+  ssh_known_hosts: host-ip:ssh-port
+script:
+- hexo g
+- gulp
+- hexo d
+branches:
+  only:
+  - hexo
+before_install:
+- openssl aes-256-cbc -K $encrypted_34f58abb81d6_key -iv $encrypted_34f58abb81d6_iv
+  -in id_rsa.enc -out ~/.ssh/id_rsa -d
+- chmod 600 ~/.ssh/id_rsa
