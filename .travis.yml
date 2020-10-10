@@ -11,6 +11,9 @@ addons:
   ssh_known_hosts:
   - ${VPS7}
   - github.com
+
+addons:
+  ssh_known_hosts: ${VPS7}:${SSHPORT}
   
 before_install:
   - sudo apt-get update -qq
@@ -36,12 +39,11 @@ before_script:
 
 script:
   #- hugo -d ./dist/
-  echo -e "HHS ${VPS7} bash ~/travis.sh\n"
-  - ssh root@${VPS7} -p ${SSHPORT} 'bash ~/travis.sh'
+  echo -e "SSH ${VPS7} bash ~/travis.sh\n"
 
 after_success:
   #- MESSAGE=$(git log --format=%B -n 1 $TRAVIS_COMMIT)
-  - ls -al
+  - ssh root@${VPS7} -p ${SSHPORT} 'bash ~/travis.sh'
 
   #- git init
   #- git remote add origin https://${GITHUB_USERNAME}:${GITHUB_TOKEN}@github.com/xiongdahu/xiongdahu.github.io.git
