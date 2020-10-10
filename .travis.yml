@@ -21,7 +21,7 @@ install:
 #在travis-ci.com上配置3个环境变量,其中GITHUB_TOKEN是在github.com的 
 #   Settings >Developer settings>Personal access tokens里面生成.
 before_script:
-  - openssl aes-256-cbc -K $encrypted_8154dbd2c1ae_key -iv $encrypted_8154dbd2c1ae_iv -in id_rsa.enc -out ~/.ssh/id_rsa -d
+  - openssl aes-256-cbc -K $encrypted_8154dbd2c1ae_key -iv $encrypted_8154dbd2c1ae_iv -in travis/travis.key.enc -out ~/.ssh/id_rsa -d
   - chmod 600 ~/.ssh/id_rsa
   #- echo -e "Host github.com\n\tStrictHostKeyChecking no\n" >> ~/.ssh/config
   #- git config --global user.email ${GITHUB_EMAIL}
