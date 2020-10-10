@@ -12,9 +12,6 @@ addons:
   - ${VPS7}
   - github.com
 
-addons:
-  ssh_known_hosts: ${VPS7}:${SSHPORT}
-  
 before_install:
   - sudo apt-get update -qq
   - sudo apt-get -yq install apt-transport-https
@@ -39,7 +36,7 @@ before_script:
 
 script:
   #- hugo -d ./dist/
-  echo -e "SSH ${VPS7} bash ~/travis.sh\n"
+  - echo -e "SSH ${VPS7} bash ~/travis.sh\n"
 
 after_success:
   #- MESSAGE=$(git log --format=%B -n 1 $TRAVIS_COMMIT)
